@@ -1,0 +1,215 @@
+/* ========================================
+   COMPONENTES UI - BOTONES Y NAVEGACIÓN
+   ======================================== */
+
+/* Botón Home/Volver */
+.home-button-container {
+  position: absolute;
+  top: -8px;
+  left: 0;
+  z-index: var(--z-dropdown);
+}
+
+.home-button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  box-shadow: var(--shadow-subtle);
+  text-decoration: none;
+  outline: none;
+}
+
+.home-button:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
+}
+
+.home-button:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-subtle);
+}
+
+.home-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: transform var(--transition);
+}
+
+.home-button:hover .home-icon {
+  transform: scale(1.1);
+}
+
+.home-text {
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.3px;
+}
+
+/* Botones principales */
+.btn, 
+form button {
+  background: var(--accent-primary);
+  color: white;
+  border: none;
+  padding: 12px var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-subtle);
+  font-family: inherit;
+}
+
+.btn:hover, 
+form button:hover {
+  background: #3367d6;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-medium);
+}
+
+.btn:active, 
+form button:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Botones secundarios */
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-medium);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+.btn-edit, 
+.btn-delete {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: none;
+  border-radius: var(--spacing-sm);
+  cursor: pointer;
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-edit {
+  background: var(--gradient-success);
+  box-shadow: 0 4px 15px rgba(63, 185, 80, 0.3);
+}
+
+.btn-edit::before {
+  font-size: 0.8rem;
+}
+
+.btn-delete {
+  background: var(--gradient-danger);
+  box-shadow: 0 4px 15px rgba(248, 81, 73, 0.3);
+}
+
+.btn-delete::before {
+  font-size: 0.8rem;
+}
+
+.btn-edit:hover, 
+.btn-delete:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-edit:active, 
+.btn-delete:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Botones de peligro */
+.btn-danger {
+  background: var(--accent-danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #d32f2f;
+  transform: translateY(-1px);
+}
+
+/* Botones pequeños */
+.btn-small {
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  transition: all var(--transition);
+}
+
+/* Estados de loading */
+.loading {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+/* Responsive para botones */
+@media (max-width: 768px) {
+  .home-button .home-text {
+    display: none;
+  }
+  
+  .home-button {
+    padding: 10px;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+}

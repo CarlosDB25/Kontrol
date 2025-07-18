@@ -1,0 +1,92 @@
+/* ========================================
+   VARIABLES CSS - SISTEMA DE DISEÑO
+   ======================================== */
+
+/* Reset básico */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Variables CSS - Paleta de colores y tokens de diseño */
+:root {
+  /* Colores de fondo */
+  --bg-primary: #1a1d23;
+  --bg-secondary: #252932;
+  --bg-tertiary: #2f3349;
+  --bg-surface: #353a50;
+  
+  /* Colores de texto */
+  --text-primary: #e8eaed;
+  --text-secondary: #bdc1c6;
+  --text-muted: #9aa0a6;
+  
+  /* Colores de acento */
+  --accent-primary: #4285f4;
+  --accent-success: #34a853;
+  --accent-warning: #fbbc04;
+  --accent-danger: #ea4335;
+  --accent-info: #17a2b8;
+  
+  /* Colores adicionales para indicadores */
+  --accent-green: #34a853;
+  --accent-red: #ea4335;
+  --accent-yellow: #fbbc04;
+  
+  /* Gradientes */
+  --gradient-success: linear-gradient(135deg, #34a853, #81c995);
+  --gradient-danger: linear-gradient(135deg, #ea4335, #f28b82);
+  --gradient-warning: linear-gradient(135deg, #fbbc04, #fdd663);
+  
+  /* Bordes */
+  --border-light: #3c4043;
+  --border-medium: #5f6368;
+  
+  /* Sombras */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.2);
+  --shadow-strong: 0 8px 24px rgba(0, 0, 0, 0.25);
+  
+  /* Radio de bordes */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  
+  /* Transiciones */
+  --transition: 0.2s ease;
+  --transition-fast: 0.15s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* Espaciados */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Tipografía */
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 0.95rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Z-index scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal-backdrop: 998;
+  --z-modal: 999;
+  --z-notification: 10000;
+}

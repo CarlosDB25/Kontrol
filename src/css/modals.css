@@ -1,0 +1,211 @@
+/* ========================================
+   MODALES Y OVERLAYS
+   ======================================== */
+
+/* Overlay de modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: var(--z-modal-backdrop);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-overlay.closing {
+  opacity: 0;
+}
+
+/* Modal base */
+#modalEditar,
+#modalConfirmacion {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%) scale(0.9);
+  width: 400px;
+  max-width: 90vw;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-strong);
+  z-index: var(--z-modal);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+
+#modalEditar.active,
+#modalConfirmacion.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-50%) scale(1);
+}
+
+#modalEditar.closing,
+#modalConfirmacion.closing {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-50%) scale(0.9);
+}
+
+/* Estilo específico para modal de edición - más ancho */
+#modalEditar {
+  width: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Modal de confirmación más ancho */
+#modalConfirmacion {
+  width: 450px;
+}
+
+/* Títulos de modal */
+#modalEditar h3,
+#modalConfirmacion h3 {
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+#modalEditar h3::before {
+  content: '✏️';
+  font-size: 1.1rem;
+}
+
+#modalConfirmacion h3::before {
+  content: '⚠️';
+  font-size: 1.1rem;
+}
+
+/* Formularios en modal */
+#modalEditar form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+#modalEditar .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+#modalEditar .input-label {
+  color: var(--text-secondary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#modalEditar input {
+  padding: 12px var(--spacing-md);
+  border: 1px solid var(--border-light);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  transition: var(--transition);
+  outline: none;
+  width: 100%;
+}
+
+#modalEditar input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+}
+
+/* Acciones de modal */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: var(--spacing-sm);
+  width: 100%;
+}
+
+#modalEditar button,
+#modalConfirmacion button {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  transition: var(--transition);
+}
+
+#modalEditar button[type="submit"] {
+  background: var(--accent-success);
+  color: white;
+}
+
+#modalEditar button[type="submit"]:hover {
+  background: #2e7d32;
+  transform: translateY(-1px);
+}
+
+#modalEditar button[type="button"],
+#modalConfirmacion button[type="button"] {
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-medium);
+}
+
+#modalEditar button[type="button"]:hover,
+#modalConfirmacion button[type="button"]:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* Contenido de confirmación */
+.confirmation-content {
+  margin-bottom: 20px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.warning-message {
+  background: rgba(234, 67, 53, 0.1);
+  color: var(--accent-danger);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(234, 67, 53, 0.2);
+  margin-top: 12px;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Responsive para modales */
+@media (max-width: 768px) {
+  #modalEditar,
+  #modalConfirmacion {
+    width: 95vw;
+    max-width: none;
+    padding: var(--spacing-md);
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+}

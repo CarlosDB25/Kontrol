@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Kontrol - Gestión de Productos</title>
+  <link rel="icon" type="image/png" href="../../assets/img/icono.png">
+  <link rel="stylesheet" href="../css/estilos.css" />
+  <script defer src="../js/productos.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Botón Home/Volver -->
+    <div class="home-button-container">
+      <button class="home-button" onclick="volverAlMenu()" title="Volver al Menú Principal">
+        <img src="../../assets/img/icono.png" alt="Home" class="home-icon" />
+        <span class="home-text">Menú Principal</span>
+      </button>
+    </div>
+
+    <header class="app-header">
+      <div class="header-logo">
+        <h1>Gestión de Productos</h1>
+      </div>
+    </header>
+    
+    <div class="form-container fade-in-up">
+      <div class="form-title">Agregar Nuevo Producto</div>
+      <form id="formProducto">
+        <div class="input-group">
+          <label class="input-label">Nombre del Producto</label>
+          <input type="text" id="nombre" placeholder="Ej. Laptop Dell XPS" required />
+        </div>
+        <div class="input-group">
+          <label class="input-label">Miniatura del Producto</label>
+          <input type="file" id="miniatura" accept="image/*" />
+        </div>
+        <button type="submit" class="btn">
+          <span class="btn-text">Agregar Producto</span>
+          <span class="loading" style="display: none;"></span>
+        </button>
+      </form>
+    </div>
+
+    <div class="table-container fade-in-up">
+      <div class="table-header">
+        <div class="table-title">📦Inventario de Productos</div>
+        <div class="product-count" id="productCount">0 productos</div>
+      </div>
+      <table id="tablaProductos">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Miniatura</th>
+            <th>Producto</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🟦 OVERLAY semitransparente -->
+  <div class="modal-overlay" id="modalOverlay" onclick="cerrarModal()"></div>
+
+  <!-- 🟦 MODAL para editar producto -->
+  <div id="modalEditar">
+    <h3>Editar Producto</h3>
+    <form id="formEditar">
+      <input type="hidden" id="editId" />
+      <div class="input-group">
+        <label class="input-label">Nombre del Producto</label>
+        <input type="text" id="editNombre" placeholder="Nombre del producto" required />
+      </div>
+      <div class="input-group">
+        <label class="input-label">Miniatura del Producto</label>
+        <input type="file" id="editMiniatura" accept="image/*" />
+      </div>
+      <div class="modal-actions">
+        <button type="submit">Guardar Cambios</button>
+        <button type="button" onclick="cerrarModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Contenedor para notificaciones -->
+  <div id="notificationContainer"></div>
+
+</body>
+</html>

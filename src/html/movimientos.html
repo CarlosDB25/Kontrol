@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kontrol - Entradas y Salidas</title>
+  <link rel="icon" type="image/png" href="../../assets/img/icono.png">
+  <link rel="stylesheet" href="../css/estilos.css" />
+  <script defer src="../js/movimientos.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Botón Home/Volver -->
+    <div class="home-button-container">
+      <button class="home-button" onclick="volverAlMenu()" title="Volver al Menú Principal">
+        <img src="../../assets/img/icono.png" alt="Home" class="home-icon" />
+        <span class="home-text">Menú Principal</span>
+      </button>
+    </div>
+
+    <header class="app-header">
+      <div class="header-logo">
+        <h1>Control de Entradas y Salidas</h1>
+      </div>
+    </header>
+
+    <!-- Resumen de Stock Actual -->
+    <div class="stock-summary fade-in-up">
+      <div class="summary-title">📊 Resumen de Inventario</div>
+      <div class="summary-grid" id="stockSummary">
+        <div class="summary-card">
+          <div class="summary-number" id="totalProductos">0</div>
+          <div class="summary-label">Productos</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="stockTotal">0</div>
+          <div class="summary-label">Stock Total</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="stockBajo">0</div>
+          <div class="summary-label">Stock Bajo</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario de Movimientos Mejorado -->
+    <div class="form-container fade-in-up">
+      <div class="form-title">
+        <span class="form-icon">Registrar Movimiento de Inventario</span>
+      </div>
+      
+      <!-- Información de Stock Actual -->
+      <div id="stockInfo" class="stock-info-panel" style="display: none;">
+        <div class="stock-info-title">📦 Información de Stock</div>
+        <div class="stock-info-grid">
+          <div class="stock-info-item">
+            <span class="stock-label">Producto:  </span>
+            <span class="stock-value" id="selectedProductName">-</span>
+          </div>
+          <div class="stock-info-item">
+            <span class="stock-label">Stock Actual:  </span>
+            <span class="stock-value" id="selectedProductStock">-</span>
+          </div>
+          <div class="stock-info-item">
+            <span class="stock-label">Stock después del movimiento:  </span>
+            <span class="stock-value" id="projectedStock">-</span>
+          </div>
+        </div>
+      </div>
+      
+      <form id="formMovimiento">
+        <!-- Tipo de movimiento -->
+        <div class="input-group full-width">
+          <label class="input-label">Tipo de Movimiento</label>
+          <div class="movement-type-selector">
+            <input type="radio" id="entrada" name="tipoMovimiento" value="entrada" required>
+            <label for="entrada" class="movement-option entrada-option">
+              <span class="movement-icon">📥</span>
+              <span class="movement-text">Entrada</span>
+            </label>
+            
+            <input type="radio" id="salida" name="tipoMovimiento" value="salida" required>
+            <label for="salida" class="movement-option salida-option">
+              <span class="movement-icon">📤</span>
+              <span class="movement-text">Salida</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Descripción del movimiento -->
+        <div class="input-group full-width">
+          <label class="input-label">Descripción del Movimiento (Opcional)</label>
+          <input type="text" id="descripcionMovimiento" placeholder="Se generará automáticamente si se deja vacío..." />
+        </div>
+
+        <!-- Selector de productos para el movimiento -->
+        <div class="input-group full-width" style="position: relative;">
+          <label class="input-label">Buscar y Agregar Productos</label>
+          <div class="product-selector-container">
+            <input type="text" id="busquedaProductos" placeholder="Buscar por nombre..." />
+            <select id="productoSalidaSelect" style="display: none;">
+              <option value="">-- Selecciona un producto --</option>
+            </select>
+            <input type="number" id="precioUnitario" placeholder="Precio" step="0.01" min="0" />
+            <input type="number" id="cantidadSalida" placeholder="Cantidad" min="1" value="1" />
+            <button type="button" id="btnAgregarProducto" class="btn-add-product">+ Agregar</button>
+          </div>
+          <div id="resultadosBusqueda" class="resultados-busqueda" style="display: none;"></div>
+        </div>
+
+        <!-- Lista de productos agregados -->
+        <div class="input-group full-width">
+          <label class="input-label">Productos en el Movimiento</label>
+          <div id="listaProductosSalida" class="productos-salida-lista">
+            <div class="empty-products-message">
+              <span>🛒 No hay productos agregados</span>
+              <small>Usa el selector de arriba para agregar productos a este movimiento</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Observaciones para el movimiento - ELIMINADO -->
+
+        <!-- Botón de envío -->
+        <div class="form-submit">
+          <button type="submit" class="btn">
+            <span class="btn-text">
+              <span class="btn-icon">💾</span>
+              Registrar Movimiento
+            </span>
+            <span class="loading" style="display: none;">⏳</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Filtros y Búsqueda -->
+    <div class="filters-container fade-in-up">
+      <div class="filters-title">🔍 Filtros de Búsqueda</div>
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Filtrar por tipo:</label>
+          <select id="filtroTipo">
+            <option value="">Todos</option>
+            <option value="entrada">Entradas</option>
+            <option value="salida">Salidas</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Filtrar por producto:</label>
+          <select id="filtroProducto">
+            <option value="">Todos los productos</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Fecha desde:</label>
+          <input type="date" id="fechaDesde">
+        </div>
+        <div class="filter-group">
+          <label>Fecha hasta:</label>
+          <input type="date" id="fechaHasta">
+        </div>
+        <div class="filter-group">
+          <label>&nbsp;</label>
+          <button type="button" class="btn-secondary" onclick="limpiarFiltros()" title="Limpiar todos los filtros">
+            🔄 Limpiar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Movimientos Mejorada -->
+    <div class="table-container fade-in-up">
+      <div class="table-header">
+        <div class="table-title">
+          <span class="table-icon">📈Historial de Movimientos</span>
+        </div>
+        <div class="table-actions">
+          <div class="product-count" id="movCount">0 movimientos</div>
+          <button class="btn-secondary" onclick="exportarMovimientos()" title="Exportar historial">
+            📊 Exportar
+          </button>
+        </div>
+      </div>
+      
+      <div class="table-wrapper">
+        <table id="tablaMovimientos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Fecha y Hora</th>
+              <th>Tipo</th>
+              <th>Descripción</th>
+              <th>Productos</th>
+              <th>Cantidad Total</th>
+              <th>Total Movimiento</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor para notificaciones -->
+  <div id="notificationContainer"></div>
+
+  <!-- Modal de detalle de movimiento -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div id="modalDetalle">
+    <h3>📦 Detalle del Movimiento</h3>
+    <div id="detalleContent">
+      <!-- Contenido dinámico del detalle -->
+    </div>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModalDetalle()" class="btn-secondary">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Modal de edición de movimiento -->
+  <div id="modalEditar">
+    <h3>Editar Movimiento ✏️</h3>
+    <div id="edicionContent">
+      <!-- Contenido dinámico de edición -->
+    </div>
+    <div class="modal-actions">
+      <button type="submit" onclick="guardarEdicionMovimiento()" class="btn">Guardar Cambios</button>
+      <button type="button" onclick="cerrarModalEdicion()" class="btn-secondary">Cancelar</button>
+    </div>
+  </div>
+
+  <!-- Modal de confirmación para eliminar -->
+  <div id="modalConfirmacion">
+    <h3>Confirmar Eliminación ⚠️</h3>
+    <div class="confirmation-content">
+      <p id="confirmationMessage">¿Estás seguro de que deseas eliminar este movimiento?</p>
+      <div class="warning-message">
+        <strong>⚠️ Advertencia:</strong> Esta acción no se puede deshacer y afectará el stock de los productos involucrados.
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" onclick="confirmarEliminacion()" class="btn-delete">Eliminar</button>
+      <button type="button" onclick="cerrarModalConfirmacion()" class="btn-secondary">Cancelar</button>
+    </div>
+  </div>
+</body>
+</html>

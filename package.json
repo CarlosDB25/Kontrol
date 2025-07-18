@@ -1,0 +1,16 @@
+{
+  "name": "Kontrol",
+  "version": "1.0.0",
+  "description": "Sistema de control de productos e inventario",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^29.0.0"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1",
+    "sqlite3": "^5.1.6"
+  }
+}

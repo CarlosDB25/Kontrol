@@ -1,0 +1,16 @@
+/* ========================================
+   KONTROL - SISTEMA DE ESTILOS MODULAR
+   
+   Arquitectura CSS organizada en módulos para
+   mejor mantenibilidad y escalabilidad
+   ======================================== */
+
+/* Importación de módulos CSS */
+@import url('./variables.css');   /* Variables del sistema de diseño */
+@import url('./base.css');        /* Estilos base y layout */
+@import url('./buttons.css');     /* Botones y navegación */
+@import url('./forms.css');       /* Formularios y controles */
+@import url('./tables.css');      /* Tablas y visualización de datos */
+@import url('./modals.css');      /* Modales y overlays */
+@import url('./movements.css');   /* Módulo específico de movimientos */
+@import url('./notifications.css'); /* Notificaciones y estados */
