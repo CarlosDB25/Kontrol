@@ -137,7 +137,14 @@ db.serialize(() => {
   // Crear producto fijo "Gasto Externo" con ID=1 si no existe
   db.run(`
     INSERT OR IGNORE INTO productos (id, nombre, miniatura, precio_compra, precio_venta, stock) 
-    VALUES (1, 'Gasto Externo', NULL, 0, 0, 1)
+    VALUES (1, 'Gasto Externo', '../../assets/img/gasto.png', 0, 0, 1)
+  `);
+  
+  // Actualizar la imagen del Gasto Externo si ya existe pero no tiene imagen
+  db.run(`
+    UPDATE productos 
+    SET miniatura = '../../assets/img/gasto.png' 
+    WHERE id = 1 AND (miniatura IS NULL OR miniatura = '')
   `);
 });
 

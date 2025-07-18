@@ -27,6 +27,17 @@ const CONFIG = {
 };
 
 // ==========================================
+// FUNCIONES AUXILIARES
+// ==========================================
+
+function formatearID(id) {
+  if (id < 100) {
+    return id.toString().padStart(3, '0');
+  }
+  return id.toString();
+}
+
+// ==========================================
 // REFERENCIAS DOM
 // ==========================================
 
@@ -298,7 +309,7 @@ class MovimientosController {
         // Para el selector principal (con stock visible)
         const option = document.createElement('option');
         option.value = producto.id;
-        option.textContent = `[${producto.id}] ${producto.nombre} (Stock: ${producto.stock})`;
+        option.textContent = `[${formatearID(producto.id)}] ${producto.nombre} (Stock: ${producto.stock})`;
         option.dataset.stock = producto.stock;
         option.dataset.nombre = producto.nombre;
         option.dataset.precioCompra = producto.precio_compra || 0;
@@ -381,7 +392,7 @@ class MovimientosController {
       productosEncontrados.forEach(producto => {
         html += `
           <div class="resultado-producto" onclick="movimientosController.seleccionarProducto(${producto.id})">
-            <span class="producto-id">[${producto.id}]</span>
+            <span class="producto-id">[${formatearID(producto.id)}]</span>
             <span class="producto-nombre">${producto.nombre}</span>
             <span class="producto-stock">Stock: ${producto.stock}</span>
           </div>
@@ -741,7 +752,7 @@ class MovimientosController {
     const productosDisplay = this.crearDisplayProductos(productos);
     
     fila.innerHTML = `
-      <td class="col-id">#${mov.id}</td>
+      <td class="col-id">#${formatearID(mov.id)}</td>
       <td>${fecha.toLocaleString('es-ES')}</td>
       <td>
         <span class="movement-badge ${tipoClass}">
@@ -869,7 +880,7 @@ class MovimientosController {
 
     document.getElementById('detalleContent').innerHTML = `
       <div class="detalle-header">
-        <h4>${tipoIcon} ${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)} #${movimiento.id}</h4>
+        <h4>${tipoIcon} ${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)} #${formatearID(movimiento.id)}</h4>
         <small>${fecha.toLocaleString('es-ES')}</small>
       </div>
       
@@ -946,7 +957,7 @@ class MovimientosController {
 
     document.getElementById('edicionContent').innerHTML = `
       <div class="edicion-header">
-        <h4>${tipoIcon} ${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)} #${movimiento.id}</h4>
+        <h4>${tipoIcon} ${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)} #${formatearID(movimiento.id)}</h4>
         <small>${fecha.toLocaleString('es-ES')}</small>
       </div>
       
