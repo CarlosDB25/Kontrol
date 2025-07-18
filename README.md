@@ -49,8 +49,8 @@
 
 1. **Clonar el repositorio**
    ```bash
-   git clone https://github.com/usuario/kontrol-electron-base.git
-   cd kontrol-electron-base
+   git clone https://github.com/usuario/Kontrol.git
+   cd Kontrol
    ```
 
 2. **Instalar dependencias**
@@ -66,7 +66,7 @@
 ### 📁 Estructura del Proyecto
 
 ```
-kontrol-electron-base/
+Kontrol/
 ├── 📁 main/                 # Proceso principal Electron
 │   ├── main.js             # Configuración de ventana principal
 │   └── preload.js          # Script de preload con APIs seguras
@@ -390,19 +390,3 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 **Desarrollado con ❤️ para gestión eficiente de inventarios**
 
 *Última actualización: 17 de julio de 2025*
-
-Productos
-  Quitar precio
-
-Entradas y salidas
-  precio compra: libre (entradas)
-  precio venta: libre (salidas)
-  Boton edicion
-
-
-reportes: utilidades -> utilidad x producto -> utilidad x dia
-  Variedades JL
-  inversion, gasto -> utilidades 
-
-menu intuitivo
-Documento de induccion
