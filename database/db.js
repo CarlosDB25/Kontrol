@@ -92,21 +92,7 @@ db.serialize(() => {
     }
   });
   
-  // Tabla de entradas (movimientos individuales de entrada)
-  db.run(`
-    CREATE TABLE IF NOT EXISTS entradas (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      producto_id INTEGER NOT NULL,
-      cantidad INTEGER NOT NULL,
-      stock_anterior INTEGER NOT NULL,
-      stock_actual INTEGER NOT NULL,
-      observaciones TEXT,
-      fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (producto_id) REFERENCES productos (id)
-    );
-  `);
-  
-  // Tabla de salidas grupales (ahora maneja entradas y salidas)
+  // Tabla de salidas grupales (maneja entradas y salidas unificadamente)
   db.run(`
     CREATE TABLE IF NOT EXISTS salidas (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

@@ -147,50 +147,13 @@ class AppState {
 // SISTEMA DE NOTIFICACIONES
 // ==========================================
 
-class NotificationManager {
-  static show(mensaje, tipo = 'info') {
-    const container = document.getElementById('notificationContainer') || document.body;
-    const notification = document.createElement('div');
-    
-    notification.className = `notification ${tipo}`;
-    notification.innerHTML = `
-      <span class="notification-icon">${this.getIcon(tipo)}</span>
-      <span class="notification-text">${mensaje}</span>
-    `;
-    
-    container.appendChild(notification);
-    
-    // Animación de entrada
-    requestAnimationFrame(() => {
-      notification.classList.add('show');
-    });
-    
-    // Auto-remover después de 3 segundos
-    setTimeout(() => {
-      notification.classList.remove('show');
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-      }, 300);
-    }, 3000);
-  }
-  
-  static getIcon(tipo) {
-    const icons = {
-      success: '✅',
-      error: '❌',
-      warning: '⚠️',
-      info: 'ℹ️'
-    };
-    return icons[tipo] || icons.info;
-  }
-  
-  static error(mensaje) { this.show(mensaje, 'error'); }
-  static success(mensaje) { this.show(mensaje, 'success'); }
-  static warning(mensaje) { this.show(mensaje, 'warning'); }
-  static info(mensaje) { this.show(mensaje, 'info'); }
-}
+// Sistema unificado importado desde shared/notifications.js
+// Las funciones están disponibles globalmente como:
+// - NotificationManager.show(mensaje, tipo)
+// - NotificationManager.error(mensaje)
+// - NotificationManager.success(mensaje)
+// - NotificationManager.warning(mensaje) 
+// - NotificationManager.info(mensaje)
 
 // ==========================================
 // GESTIÓN DE DATOS

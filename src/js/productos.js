@@ -43,29 +43,8 @@ const editMiniatura = document.getElementById('editMiniatura');
 // Variable para almacenar la miniatura actual del producto siendo editado
 let miniaturaActual = null;
 
-// Sistema de notificaciones mejorado
-function mostrarNotificacion(mensaje, tipo = 'info') {
-  const container = document.getElementById('notificationContainer') || document.body;
-  const notification = document.createElement('div');
-  
-  notification.className = `notification ${tipo}`;
-  notification.textContent = mensaje;
-  container.appendChild(notification);
-  
-  // Mostrar notificación
-  setTimeout(() => notification.classList.add('show'), 100);
-  
-  // Ocultar después de 3 segundos
-  setTimeout(() => {
-    notification.classList.remove('show');
-    setTimeout(() => container.removeChild(notification), 300);
-  }, 3000);
-}
-
-// Utilidades de notificación
-const notificarError = (msg) => mostrarNotificacion(msg, 'error');
-const notificarExito = (msg) => mostrarNotificacion(msg, 'success');
-const notificarInfo = (msg) => mostrarNotificacion(msg, 'info');
+// Sistema de notificaciones - Importado desde shared/notifications.js
+// Las funciones están disponibles globalmente
 
 // Función para sanitizar texto y prevenir XSS
 function sanitizarTexto(texto) {
