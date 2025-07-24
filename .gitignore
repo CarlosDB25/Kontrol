@@ -20,5 +20,8 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 
-#local db
+# local db
 database/kontrol.db
+
+# client img
+assets/img/variedadesjl.png
