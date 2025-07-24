@@ -23,5 +23,6 @@ Thumbs.db
 # local db
 database/kontrol.db
 
-# client img
-assets/img/variedadesjl.png
+# client specific files
+assets/img/variedades/
+assets/img/*variedades*
