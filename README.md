@@ -4,6 +4,10 @@
 
 **Kontrol** es una aplicación de escritorio desarrollada con **Electron** para la gestión completa de inventarios, movimientos de productos y generación de reportes empresariales. Diseñada para pequeñas y medianas empresas que necesitan un control eficiente de su stock.
 
+> **Versión:** 2.0.0  
+> **Fecha de actualización:** Julio 2025  
+> **Estado:** Producción ✅
+
 ## 🚀 Características Principales
 
 ### 📦 **Gestión de Productos**
@@ -12,6 +16,7 @@
 - ✅ Edición y eliminación de productos
 - ✅ Sistema de productos activos/inactivos
 - ✅ Búsqueda y filtrado avanzado
+- ✅ Alertas de stock mínimo
 
 ### 📈 **Control de Movimientos**
 - ✅ Registro de entradas (compras/reposición)
@@ -20,13 +25,15 @@
 - ✅ Historial completo de movimientos
 - ✅ Actualización automática de stock
 - ✅ Manejo de precios por movimiento
+- ✅ Sistema de edición en línea
 
 ### 📊 **Reportes y Análisis**
 - ✅ **Reportes Diarios**: Ventas, compras y utilidades del día
 - ✅ **Reportes Mensuales**: Análisis mensual completo con días de actividad
 - ✅ **Historial de Productos**: Seguimiento detallado por producto
 - ✅ **Indicadores Clave**: Métricas empresariales en tiempo real
-- ✅ **Exportación a CSV**: Descarga de todos los reportes
+- ✅ **Exportación a PDF**: Reportes profesionales con logo corporativo
+- ✅ **Interfaz intuitiva**: Navegación por pestañas y visualización clara
 
 ### 🎨 **Interfaz y UX**
 - ✅ Diseño moderno y responsivo
@@ -34,16 +41,18 @@
 - ✅ Navegación fluida entre módulos
 - ✅ Estados de carga y feedback visual
 - ✅ Tema consistente con variables CSS
+- ✅ Animaciones y transiciones suaves
 
 ## 🛠️ Tecnologías Utilizadas
 
 | Tecnología | Propósito | Versión |
 |------------|-----------|---------|
-| **Electron** | Framework de aplicación de escritorio | ^Latest |
-| **Node.js** | Runtime de JavaScript | ^Latest |
-| **SQLite3** | Base de datos local | ^Latest |
-| **HTML5 + CSS3** | Frontend y estilos | ^Latest |
-| **JavaScript ES6+** | Lógica de negocio | ^Latest |
+| **Electron** | Framework de aplicación de escritorio | 30+ |
+| **Node.js** | Runtime de JavaScript | 18+ |
+| **SQLite3** | Base de datos local | 5+ |
+| **jsPDF** | Generación de PDFs | 2+ |
+| **HTML5 + CSS3** | Frontend y estilos | Estándar |
+| **JavaScript ES6+** | Lógica de negocio | ES2022+ |
 
 ## 📁 Estructura del Proyecto
 
@@ -68,9 +77,9 @@ Kontrol-Base/
 │   ├── main.js               # Punto de entrada de Electron
 │   └── preload.js            # Script de precarga
 ├── 📁 src/                   # Código fuente frontend
-│   ├── 📁 css/               # Hojas de estilo
+│   ├── 📁 css/               # Hojas de estilo modulares
 │   │   ├── variables.css     # Variables CSS globales
-│   │   ├── base.css          # Estilos base
+│   │   ├── base.css          # Estilos base y layout
 │   │   ├── buttons.css       # Estilos de botones
 │   │   ├── forms.css         # Estilos de formularios
 │   │   ├── tables.css        # Estilos de tablas
@@ -79,7 +88,7 @@ Kontrol-Base/
 │   │   ├── movements.css     # Estilos de movimientos
 │   │   ├── reportes.css      # Estilos de reportes
 │   │   ├── notifications.css # Sistema de notificaciones
-│   │   └── estilos.css       # CSS principal
+│   │   └── estilos.css       # CSS principal (importa módulos)
 │   ├── 📁 html/              # Páginas HTML
 │   │   ├── menu.html         # Menú principal
 │   │   ├── productos.html    # Gestión de productos
@@ -88,11 +97,14 @@ Kontrol-Base/
 │   └── 📁 js/                # Scripts JavaScript
 │       ├── menu.js           # Lógica del menú
 │       ├── productos.js      # Lógica de productos
-│       ├── movimientos.js    # Lógica de movimientos
-│       ├── reportes.js       # Lógica de reportes
+│       ├── movimientos.js    # Lógica de movimientos (refactorizado)
+│       ├── reportes.js       # Lógica de reportes (completo)
 │       └── 📁 shared/        # Módulos compartidos
-│           └── notifications.js # Sistema de notificaciones
+│           ├── notifications.js # Sistema de notificaciones
+│           └── utils.js      # Utilidades compartidas
+├── 📁 node_modules/          # Dependencias (auto-generado)
 ├── package.json              # Dependencias y scripts
+├── package-lock.json         # Lock de dependencias
 └── README.md                 # Documentación del proyecto
 ```
 
@@ -114,9 +126,13 @@ CREATE TABLE productos (
 ```sql
 CREATE TABLE movimientos (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  tipo TEXT NOT NULL CHECK (tipo IN ('entrada', 'salida')),
-  descripcion TEXT,
-  fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+  tipo TEXT NOT NULL CHECK(tipo IN ('entrada', 'salida')),
+  descripcion TEXT NOT NULL DEFAULT 'Movimiento',
+  total_productos INTEGER NOT NULL DEFAULT 0,
+  total_movimiento REAL NOT NULL DEFAULT 0,
+  fecha DATE DEFAULT (date('now')),
+  fecha_completa DATETIME DEFAULT CURRENT_TIMESTAMP,
+  usuario TEXT DEFAULT 'sistema'
 );
 ```
 
@@ -128,19 +144,25 @@ CREATE TABLE movimientos_detalle (
   producto_id INTEGER NOT NULL,
   cantidad INTEGER NOT NULL,
   precio_unitario REAL NOT NULL,
+  subtotal REAL NOT NULL,
   stock_anterior INTEGER NOT NULL,
   stock_nuevo INTEGER NOT NULL,
-  FOREIGN KEY (movimiento_id) REFERENCES movimientos(id),
+  FOREIGN KEY (movimiento_id) REFERENCES movimientos(id) ON DELETE CASCADE,
   FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 ```
 
+### **Relaciones**
+- **movimientos** ↔ **movimientos_detalle**: Relación 1:N con CASCADE DELETE
+- **productos** ↔ **movimientos_detalle**: Relación 1:N
+- **Índices**: Creados automáticamente para optimizar consultas
+
 ## 🚀 Instalación y Configuración
 
 ### **Prerrequisitos**
-- Node.js (versión 16 o superior)
-- npm o yarn
-- Git
+- Node.js (versión 18 o superior)
+- npm (incluido con Node.js)
+- Git (opcional, para clonar)
 
 ### **Pasos de instalación**
 
@@ -155,23 +177,20 @@ cd Kontrol-Base
 npm install
 ```
 
-3. **Inicializar la base de datos**
-```bash
-# La base de datos se inicializa automáticamente al ejecutar la aplicación
-```
-
-4. **Ejecutar la aplicación**
+3. **Ejecutar la aplicación**
 ```bash
 npm start
 ```
+
+> **Nota:** La base de datos SQLite se inicializa automáticamente en la primera ejecución, creando todas las tablas y datos iniciales necesarios.
 
 ### **Scripts disponibles**
 ```json
 {
   "start": "electron .",
-  "dev": "electron . --dev",
   "build": "electron-builder",
-  "pack": "electron-builder --dir"
+  "pack": "electron-builder --dir",
+  "clean": "rm -rf dist/ build/"
 }
 ```
 
@@ -383,19 +402,29 @@ npm install
 
 #### **"Reportes no cargan"**
 - Verificar que existan datos en la base de datos
-- Revisar logs en consola de desarrollador (F12)
+- Revisar conexión de la aplicación
 - Confirmar que los IPCs estén registrados
 
-### **Logs y Depuración**
-```javascript
-// Activar modo desarrollo
-npm run dev
+#### **"Stock inconsistente"**
+- Revisar movimientos recientes en el historial
+- Verificar que no haya movimientos duplicados
+- Si persiste, contactar soporte técnico
 
-// Ver logs en consola
-console.log('Debug info:', data);
+### **Logs de la aplicación**
+Los logs se muestran en la consola donde se ejecuta `npm start`. Para información adicional:
 
-// Abrir DevTools
-Ctrl + Shift + I
+```bash
+# Ejecutar con logs detallados
+npm start
+```
+
+### **Respaldo de datos**
+```bash
+# Copiar base de datos
+cp database/kontrol.db database/backup_$(date +%Y%m%d).db
+
+# Restaurar desde respaldo
+cp database/backup_YYYYMMDD.db database/kontrol.db
 ```
 
 ## 🤝 Contribución

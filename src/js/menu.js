@@ -34,7 +34,6 @@ async function cargarResumenRapido() {
       document.getElementById('movimientosHoy').textContent = '...';
     }
   } catch (error) {
-    console.error('Error cargando resumen:', error);
     document.getElementById('totalProductos').textContent = '-';
     document.getElementById('stockTotal').textContent = '-';
     document.getElementById('movimientosHoy').textContent = '-';

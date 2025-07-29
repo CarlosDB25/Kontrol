@@ -6,13 +6,9 @@
  * Vuelve al menú principal
  */
 function volverAlMenu() {
-  console.log('🏠 Navegando al menú principal...');
-  
   if (window.electronAPI && window.electronAPI.loadPage) {
-    console.log('✅ Usando electronAPI.loadPage');
     window.electronAPI.loadPage('menu');
   } else {
-    console.log('⚠️ electronAPI no disponible, usando fallback');
     window.location.href = 'menu.html';
   }
 }
@@ -88,8 +84,6 @@ function validarNumeroPositivo(numero) {
 function mostrarExito(mensaje) {
   if (typeof mostrarNotificacion === 'function') {
     mostrarNotificacion(mensaje, 'success');
-  } else {
-    console.log('ÉXITO:', mensaje);
   }
 }
 
@@ -100,8 +94,6 @@ function mostrarExito(mensaje) {
 function mostrarError(mensaje) {
   if (typeof mostrarNotificacion === 'function') {
     mostrarNotificacion(mensaje, 'error');
-  } else {
-    console.error('ERROR:', mensaje);
   }
 }
 
@@ -140,7 +132,3 @@ window.mostrarExito = mostrarExito;
 window.mostrarError = mostrarError;
 window.limpiarFormulario = limpiarFormulario;
 window.capitalizarTexto = capitalizarTexto;
-
-// Debug: Verificar que las funciones se registren correctamente
-console.log('✅ Utilidades compartidas cargadas correctamente');
-console.log('🔧 volverAlMenu disponible:', typeof window.volverAlMenu);

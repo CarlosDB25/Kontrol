@@ -165,7 +165,6 @@ class DataManager {
       const productos = await window.api.obtenerProductos();
       return productos || [];
     } catch (error) {
-      console.error('Error al cargar productos:', error);
       throw new Error('No se pudieron cargar los productos');
     }
   }
@@ -175,7 +174,6 @@ class DataManager {
       const movimientos = await window.api.obtenerMovimientos();
       return movimientos || [];
     } catch (error) {
-      console.error('Error al cargar movimientos:', error);
       throw new Error('No se pudieron cargar los movimientos');
     }
   }
@@ -185,7 +183,6 @@ class DataManager {
       const detalle = await window.api.obtenerDetalleSalida(movimientoId);
       return detalle || [];
     } catch (error) {
-      console.error('Error al cargar detalle:', error);
       throw new Error('No se pudo cargar el detalle del movimiento');
     }
   }
@@ -195,7 +192,6 @@ class DataManager {
       const resultado = await window.api.registrarMovimiento(movimiento);
       return resultado;
     } catch (error) {
-      console.error('Error al registrar movimiento:', error);
       throw error;
     }
   }
@@ -205,7 +201,6 @@ class DataManager {
       const resultado = await window.api.eliminarMovimiento(id);
       return resultado;
     } catch (error) {
-      console.error('Error al eliminar movimiento:', error);
       throw error;
     }
   }
@@ -215,7 +210,6 @@ class DataManager {
       const resultado = await window.api.actualizarMovimiento(movimientoId, detalleActualizado);
       return resultado;
     } catch (error) {
-      console.error('Error al actualizar movimiento:', error);
       throw error;
     }
   }
@@ -254,7 +248,6 @@ class MovimientosController {
       this.mostrarMovimientos(this.state.movimientos);
       
     } catch (error) {
-      console.error('Error al cargar datos iniciales:', error);
       throw error;
     }
   }
@@ -980,8 +973,7 @@ class MovimientosController {
 
   // Métodos para exportación y navegación
   exportarMovimientos() {
-    NotificationManager.info('Función de exportación en desarrollo');
-    // TODO: Implementar exportación a Excel/CSV
+    NotificationManager.info('Función de exportación próximamente');
   }
 
   actualizarCampoEdicion(index, campo, valor) {
@@ -1033,17 +1025,12 @@ class MovimientosController {
       this.cerrarModales();
       await this.cargarDatosIniciales(); // Recargar datos
     } catch (error) {
-      console.error('Error al guardar edición:', error);
       NotificationManager.error('Error al guardar los cambios: ' + error.message);
     }
   }
 
   volverAlMenu() {
-    if (window.electronAPI) {
-      window.electronAPI.loadPage('menu');
-    } else {
-      window.location.href = 'menu.html';
-    }
+    volverAlMenu(); // Usar función compartida de utils.js
   }
 }
 

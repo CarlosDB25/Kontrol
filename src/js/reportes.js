@@ -1,8 +1,6 @@
 // ================================================
-// FUNCIONALIDAD DE REPORTES Y ANÁLISIS - CORREGIDO
+// FUNCIONALIDAD DE REPORTES Y ANÁLISIS
 // ================================================
-
-console.log('📁 Archivo reportes.js cargado');
 
 // Estado global
 let currentTab = 'daily';
@@ -13,20 +11,15 @@ let currentReportData = null;
 // ================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 Inicializando módulo de reportes...');
-  
   inicializarReportes();
   configurarEventListeners();
   configurarFechaActual();
-  
-  console.log('✅ Módulo de reportes inicializado correctamente');
 });
 
 function inicializarReportes() {
   cargarProductosSelector();
   configurarSelectoresAnuales();
   mostrarEstadoInicial();
-  console.log('✅ Reportes inicializados correctamente');
 }
 
 function configurarEventListeners() {
@@ -101,8 +94,6 @@ function cambiarTab(tabName) {
 
 async function cargarProductosSelector() {
   try {
-    console.log('🔄 Cargando productos desde base de datos...');
-    
     const resultado = await window.electronAPI.invoke('obtener-productos-selector');
     
     if (!resultado.success) {
@@ -121,10 +112,7 @@ async function cargarProductosSelector() {
       select.appendChild(option);
     });
     
-    console.log('✅ Productos cargados:', productos.length);
-    
   } catch (error) {
-    console.error('❌ Error cargando productos:', error);
     mostrarNotificacionLocal('Error al cargar productos: ' + error.message, 'error');
   }
 }
@@ -141,7 +129,6 @@ async function cargarReporteDiario() {
       document.getElementById('dailyDate').value = fecha;
     }
     
-    console.log('🔍 Cargando reporte diario para:', fecha);
     mostrarEstadoCarga();
     
     const resultado = await window.electronAPI.invoke('obtener-reporte-diario', fecha);
@@ -165,7 +152,6 @@ async function cargarReporteDiario() {
     mostrarNotificacion(`Reporte diario generado para ${formatearFecha(fecha, true)}`, 'success');
     
   } catch (error) {
-    console.error('❌ Error cargando reporte diario:', error);
     mostrarNotificacion('Error al cargar el reporte diario: ' + error.message, 'error');
     mostrarEstadoVacio();
   }
@@ -185,7 +171,6 @@ async function cargarReporteMensual() {
       return;
     }
     
-    console.log('📈 Cargando reporte mensual para:', año, mes);
     mostrarEstadoCarga();
     
     const resultado = await window.electronAPI.invoke('obtener-reporte-mensual', año, mes);
@@ -214,7 +199,6 @@ async function cargarReporteMensual() {
     mostrarNotificacion(`Reporte mensual generado para ${nombreMes} ${año}`, 'success');
     
   } catch (error) {
-    console.error('❌ Error cargando reporte mensual:', error);
     mostrarNotificacion('Error al cargar el reporte mensual: ' + error.message, 'error');
     mostrarEstadoVacio();
   }
@@ -235,7 +219,6 @@ async function cargarHistorialProducto() {
       return;
     }
     
-    console.log('📦 Cargando historial de producto:', productoId);
     mostrarEstadoCarga();
     
     const resultado = await window.electronAPI.invoke('obtener-historial-producto', productoId, fechaInicio, fechaFin);
@@ -262,7 +245,6 @@ async function cargarHistorialProducto() {
     mostrarNotificacion(`Historial generado para ${nombreProducto}`, 'success');
     
   } catch (error) {
-    console.error('❌ Error cargando historial:', error);
     mostrarNotificacion('Error al cargar el historial: ' + error.message, 'error');
     mostrarEstadoVacio();
   }
@@ -539,7 +521,6 @@ function exportarReporte() {
         break;
     }
   } catch (error) {
-    console.error('Error exportando reporte:', error);
     mostrarNotificacion('Error al exportar el reporte', 'error');
   }
 }
@@ -597,8 +578,6 @@ async function crearEncabezadoPDF(doc, titulo, fecha = null) {
     
     return 60; // Retorna la posición Y donde termina el encabezado
   } catch (error) {
-    console.warn('No se pudo cargar el logo, continuando sin él:', error);
-    
     // Crear encabezado sin logo
     doc.setFontSize(20);
     doc.setFont('helvetica', 'bold');
@@ -635,6 +614,11 @@ async function generarPDFDiario(data) {
   doc.text(`Total Compras: $${formatearNumero(data.resumen.totalCompras || 0)}`, 20, yInicial + 35);
   doc.text(`Utilidad Total: $${formatearNumero(data.resumen.utilidadTotal || 0)}`, 20, yInicial + 45);
   
+  // Título para tabla de productos
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Detalle por Producto', 20, yInicial + 65);
+  
   // Tabla de productos del día
   if (data.reporte && data.reporte.length > 0) {
     const columnas = ['Producto', 'U. Vendidas', 'Total Ventas', 'U. Compradas', 'Total Compras', 'Utilidad'];
@@ -650,7 +634,7 @@ async function generarPDFDiario(data) {
     doc.autoTable({
       head: [columnas],
       body: filas,
-      startY: yInicial + 60,
+      startY: yInicial + 80,
       theme: 'grid',
       styles: { fontSize: 9 },
       headStyles: { fillColor: [52, 152, 219] }
@@ -681,7 +665,13 @@ async function generarPDFMensual(data) {
   doc.text(`Total Compras: $${formatearNumero(data.resumen.totalCompras || 0)}`, 20, yInicial + 35);
   doc.text(`Utilidad Total: $${formatearNumero(data.resumen.utilidadTotal || 0)}`, 20, yInicial + 45);
   
+  // Título para tabla principal
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Resumen por Producto', 20, yInicial + 65);
+  
   // Tabla principal por productos
+  let yActual = yInicial + 80;
   if (data.reporte && data.reporte.length > 0) {
     const columnas = ['Producto', 'U. Vendidas', 'Ventas', 'U. Compradas', 'Compras', 'Utilidad'];
     const filas = data.reporte.map(item => [
@@ -693,20 +683,36 @@ async function generarPDFMensual(data) {
       `$${formatearNumero(item.utilidad_mes || 0)}`
     ]);
     
-    doc.autoTable({
+    const tabla1 = doc.autoTable({
       head: [columnas],
       body: filas,
-      startY: yInicial + 60,
+      startY: yActual,
       theme: 'grid',
       styles: { fontSize: 8 },
-      headStyles: { fillColor: [52, 152, 219] }
+      headStyles: { fillColor: [52, 152, 219] },
+      didDrawPage: function (data) {
+        yActual = data.cursor.y;
+      }
     });
   }
+
+  // Espaciado entre tablas y título para la segunda tabla
+  yActual += 25;
   
-  // Tabla de días con actividad (nueva página si es necesario)
-  if (data.diasActividad && data.diasActividad.length > 0) {
+  // Verificar si necesitamos nueva página
+  if (yActual > 250) {
     doc.addPage();
-    const yNuevaPagina = await crearEncabezadoPDF(doc, 'Actividad Diaria del Mes', fechaFormateada);
+    yActual = 30;
+  }
+
+  // Tabla de días con actividad
+  if (data.diasActividad && data.diasActividad.length > 0) {
+    // Título para la segunda tabla
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Días con Actividad', 20, yActual);
+    
+    yActual += 15;
     
     const columnasDias = ['Fecha', 'Productos Diferentes', 'Ventas', 'Compras', 'Utilidad'];
     const filasDias = data.diasActividad.map(dia => [
@@ -720,7 +726,7 @@ async function generarPDFMensual(data) {
     doc.autoTable({
       head: [columnasDias],
       body: filasDias,
-      startY: yNuevaPagina + 20,
+      startY: yActual,
       theme: 'grid',
       styles: { fontSize: 9 },
       headStyles: { fillColor: [52, 152, 219] }
@@ -773,8 +779,6 @@ function mostrarNotificacionLocal(mensaje, tipo = 'info') {
     NotificationManager.show(mensaje, tipo);
   } else if (typeof window.mostrarNotificacion === 'function') {
     window.mostrarNotificacion(mensaje, tipo);
-  } else {
-    console.log(`[${tipo.toUpperCase()}] ${mensaje}`);
   }
 }
 

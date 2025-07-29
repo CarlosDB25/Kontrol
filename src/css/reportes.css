@@ -249,8 +249,28 @@
   margin-top: var(--spacing-4xl) !important;
 }
 
+/* Espaciado entre tablas consecutivas */
 .table-container + .table-container {
   margin-top: var(--spacing-4xl);
+}
+
+/* Espaciado específico para la tabla de actividad */
+#activityTable {
+  margin-top: var(--spacing-4xl) !important;
+  position: relative;
+}
+
+/* Línea separadora visual antes de la tabla de actividad */
+#activityTable::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--spacing-4xl) / 2);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+  border-radius: 1px;
 }
 
 .loading-spinner {

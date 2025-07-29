@@ -12,44 +12,15 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: path.join(__dirname, '..', 'assets', 'logo.ico'), // Usando PNG en lugar de ICO
+    icon: path.join(__dirname, '..', 'assets', 'logo.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
     }
   });
 
-  // 👇 Crear menú de desarrollo
-  const template = [
-    {
-      label: 'Desarrollo',
-      submenu: [
-        {
-          label: 'Herramientas de Desarrollador',
-          accelerator: 'F12',
-          click: () => {
-            mainWindow.webContents.openDevTools();
-          }
-        },
-        {
-          label: 'Recargar',
-          accelerator: 'F5',
-          click: () => {
-            mainWindow.reload();
-          }
-        }
-      ]
-    }
-  ];
-  
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-  
-  mainWindow.maximize(); // ✅ Esta línea abre la ventana maximizada
+  mainWindow.maximize();
   mainWindow.loadFile(path.join(__dirname, '../src/html/menu.html'));
-  
-  // 👇 Abrir DevTools automáticamente en desarrollo
-  // mainWindow.webContents.openDevTools();
 }
 
 // Handler para navegación entre páginas
