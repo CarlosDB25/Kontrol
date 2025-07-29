@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kontrol - Menú Principal</title>
+  <link rel="icon" type="image/png" href="../../assets/img/icono.png">
+  <link rel="stylesheet" href="../css/estilos.css" />
+  <script defer src="../js/shared/notifications.js"></script>
+  <script defer src="../js/menu.js"></script>
+</head>
+<body class="menu-page">
+  <div class="container">
+    <header class="app-header">
+      <div class="header-logo">
+        <img src="../../assets/img/Kontrol logo.png" alt="Kontrol">
+      </div>
+    </header>
+
+    <!-- Grid de opciones del menú -->
+    <div class="menu-grid fade-in-up">
+      
+      <!-- Productos -->
+      <div class="menu-card" onclick="navegarA('productos')">
+        <div class="menu-icon">📦</div>
+        <h3>Gestión de Productos</h3>
+        <p>Administrar catálogo de productos, stock y precios</p>
+        <div class="menu-badge">Inventario</div>
+      </div>
+
+      <!-- Movimientos -->
+      <div class="menu-card" onclick="navegarA('movimientos')">
+        <div class="menu-icon">📋</div>
+        <h3>Entradas y Salidas</h3>
+        <p>Registrar movimientos de inventario y transacciones</p>
+        <div class="menu-badge">Operaciones</div>
+      </div>
+
+      <!-- Reportes -->
+      <div class="menu-card featured" onclick="navegarA('reportes')">
+        <div class="menu-icon">📊</div>
+        <h3>Reportes y Análisis</h3>
+        <p>Visualizar reportes diarios, mensuales y análisis de utilidades</p>
+        <div class="menu-badge">Informes</div>
+      </div>
+
+    </div>
+
+    <!-- Resumen rápido -->
+    <div class="quick-summary fade-in-up">
+      <div class="summary-title">📈 Resumen Rápido</div>
+      <div class="summary-grid" id="quickSummary">
+        <div class="summary-card">
+          <div class="summary-number" id="totalProductos">-</div>
+          <div class="summary-label">Productos Activos</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="stockTotal">-</div>
+          <div class="summary-label">Stock Total</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-number" id="movimientosHoy">-</div>
+          <div class="summary-label">Movimientos Hoy</div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Área de notificaciones -->
+  <div id="notificationArea"></div>
+</body>
+</html>

@@ -1,392 +1,469 @@
-# 📦 KONTROL - Sistema de Gestión de Inventario
+# 📊 KONTROL - Sistema de Gestión de Inventario
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/user/kontrol)
-[![Electron](https://img.shields.io/badge/electron-29.0.0-brightgreen.svg)](https://electronjs.org/)
-[![SQLite](https://img.shields.io/badge/database-SQLite-orange.svg)](https://sqlite.org/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+![Kontrol Logo](assets/img/Kontrol%20logo.png)
 
-> Sistema completo de control de productos e inventario desarrollado con Electron, JavaScript y SQLite.
+**Kontrol** es una aplicación de escritorio desarrollada con **Electron** para la gestión completa de inventarios, movimientos de productos y generación de reportes empresariales. Diseñada para pequeñas y medianas empresas que necesitan un control eficiente de su stock.
 
----
+## 🚀 Características Principales
 
-## 🎯 Características Principales
+### 📦 **Gestión de Productos**
+- ✅ Registro completo de productos con miniaturas
+- ✅ Control de stock en tiempo real  
+- ✅ Edición y eliminación de productos
+- ✅ Sistema de productos activos/inactivos
+- ✅ Búsqueda y filtrado avanzado
 
-### 📊 **Gestión de Productos**
-- ✅ Registro y edición de productos
-- ✅ Control de precios y miniaturas
-- ✅ Seguimiento de stock en tiempo real
-- ✅ Alertas de stock bajo
-
-### 📈 **Movimientos de Inventario**
-- ✅ Entradas y salidas grupales
-- ✅ Información de stock proyectado
-- ✅ Filtros avanzados por producto y fecha
+### 📈 **Control de Movimientos**
+- ✅ Registro de entradas (compras/reposición)
+- ✅ Registro de salidas (ventas/gastos)
+- ✅ Salidas grupales para múltiples productos
 - ✅ Historial completo de movimientos
+- ✅ Actualización automática de stock
+- ✅ Manejo de precios por movimiento
 
-### 🎨 **Interfaz Moderna**
-- ✅ Diseño responsive y atractivo
-- ✅ Animaciones suaves y feedback visual
+### 📊 **Reportes y Análisis**
+- ✅ **Reportes Diarios**: Ventas, compras y utilidades del día
+- ✅ **Reportes Mensuales**: Análisis mensual completo con días de actividad
+- ✅ **Historial de Productos**: Seguimiento detallado por producto
+- ✅ **Indicadores Clave**: Métricas empresariales en tiempo real
+- ✅ **Exportación a CSV**: Descarga de todos los reportes
+
+### 🎨 **Interfaz y UX**
+- ✅ Diseño moderno y responsivo
 - ✅ Sistema de notificaciones integrado
-- ✅ Modales informativos
+- ✅ Navegación fluida entre módulos
+- ✅ Estados de carga y feedback visual
+- ✅ Tema consistente con variables CSS
 
-### 🔧 **Arquitectura Robusta**
-- ✅ CSS modular (8 archivos especializados)
-- ✅ JavaScript con patrones de diseño modernos
-- ✅ Base de datos SQLite optimizada
-- ✅ Comunicación IPC segura
+## 🛠️ Tecnologías Utilizadas
 
----
+| Tecnología | Propósito | Versión |
+|------------|-----------|---------|
+| **Electron** | Framework de aplicación de escritorio | ^Latest |
+| **Node.js** | Runtime de JavaScript | ^Latest |
+| **SQLite3** | Base de datos local | ^Latest |
+| **HTML5 + CSS3** | Frontend y estilos | ^Latest |
+| **JavaScript ES6+** | Lógica de negocio | ^Latest |
+
+## 📁 Estructura del Proyecto
+
+```
+Kontrol-Base/
+├── 📁 assets/                 # Recursos gráficos
+│   ├── logo.ico              # Icono de la aplicación
+│   └── img/                  # Imágenes y logos
+├── 📁 database/              # Módulo de base de datos
+│   ├── config.js             # Configuración de SQLite
+│   ├── db.js                 # Módulo principal unificado
+│   ├── init.js               # Inicialización y migraciones
+│   ├── productos-db.js       # Funciones de productos
+│   ├── movimientos-db.js     # Funciones de movimientos
+│   ├── reportes-db.js        # Funciones de reportes
+│   └── kontrol.db            # Base de datos SQLite
+├── 📁 ipc/                   # Comunicación IPC
+│   ├── productosIPC.js       # IPC para productos
+│   ├── movimientosIPC.js     # IPC para movimientos
+│   └── reportesIPC.js        # IPC para reportes
+├── 📁 main/                  # Proceso principal
+│   ├── main.js               # Punto de entrada de Electron
+│   └── preload.js            # Script de precarga
+├── 📁 src/                   # Código fuente frontend
+│   ├── 📁 css/               # Hojas de estilo
+│   │   ├── variables.css     # Variables CSS globales
+│   │   ├── base.css          # Estilos base
+│   │   ├── buttons.css       # Estilos de botones
+│   │   ├── forms.css         # Estilos de formularios
+│   │   ├── tables.css        # Estilos de tablas
+│   │   ├── modals.css        # Estilos de modales
+│   │   ├── menu.css          # Estilos del menú
+│   │   ├── movements.css     # Estilos de movimientos
+│   │   ├── reportes.css      # Estilos de reportes
+│   │   ├── notifications.css # Sistema de notificaciones
+│   │   └── estilos.css       # CSS principal
+│   ├── 📁 html/              # Páginas HTML
+│   │   ├── menu.html         # Menú principal
+│   │   ├── productos.html    # Gestión de productos
+│   │   ├── movimientos.html  # Gestión de movimientos
+│   │   └── reportes.html     # Módulo de reportes
+│   └── 📁 js/                # Scripts JavaScript
+│       ├── menu.js           # Lógica del menú
+│       ├── productos.js      # Lógica de productos
+│       ├── movimientos.js    # Lógica de movimientos
+│       ├── reportes.js       # Lógica de reportes
+│       └── 📁 shared/        # Módulos compartidos
+│           └── notifications.js # Sistema de notificaciones
+├── package.json              # Dependencias y scripts
+└── README.md                 # Documentación del proyecto
+```
+
+## 🗄️ Estructura de Base de Datos
+
+### **Tabla: productos**
+```sql
+CREATE TABLE productos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre TEXT NOT NULL UNIQUE,
+  miniatura TEXT,
+  stock_actual INTEGER NOT NULL DEFAULT 0,
+  activo BOOLEAN NOT NULL DEFAULT 1,
+  fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### **Tabla: movimientos**
+```sql
+CREATE TABLE movimientos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tipo TEXT NOT NULL CHECK (tipo IN ('entrada', 'salida')),
+  descripcion TEXT,
+  fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### **Tabla: movimientos_detalle**
+```sql
+CREATE TABLE movimientos_detalle (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  movimiento_id INTEGER NOT NULL,
+  producto_id INTEGER NOT NULL,
+  cantidad INTEGER NOT NULL,
+  precio_unitario REAL NOT NULL,
+  stock_anterior INTEGER NOT NULL,
+  stock_nuevo INTEGER NOT NULL,
+  FOREIGN KEY (movimiento_id) REFERENCES movimientos(id),
+  FOREIGN KEY (producto_id) REFERENCES productos(id)
+);
+```
 
 ## 🚀 Instalación y Configuración
 
-### 📋 Prerrequisitos
+### **Prerrequisitos**
+- Node.js (versión 16 o superior)
+- npm o yarn
+- Git
 
-- **Node.js** v16 o superior
-- **npm** v8 o superior  
-- **Sistema operativo**: Windows, macOS, o Linux
-
-### 🔧 Instalación
+### **Pasos de instalación**
 
 1. **Clonar el repositorio**
-   ```bash
-   git clone https://github.com/usuario/Kontrol.git
-   cd Kontrol
-   ```
+```bash
+git clone https://github.com/CarlosDB25/Kontrol.git
+cd Kontrol-Base
+```
 
 2. **Instalar dependencias**
-   ```bash
-   npm install
-   ```
-
-3. **Ejecutar la aplicación**
-   ```bash
-   npm start
-   ```
-
-### 📁 Estructura del Proyecto
-
-```
-Kontrol/
-├── 📁 main/                 # Proceso principal Electron
-│   ├── main.js             # Configuración de ventana principal
-│   └── preload.js          # Script de preload con APIs seguras
-├── 📁 ipc/                 # Comunicación entre procesos
-│   ├── productosIPC.js     # Handlers para productos
-│   └── movimientosIPC.js   # Handlers para movimientos
-├── 📁 database/            # Base de datos SQLite
-│   ├── db.js               # Operaciones de base de datos
-│   └── kontrol.db          # Archivo de base de datos
-├── 📁 src/                 # Frontend de la aplicación
-│   ├── 📁 css/             # Estilos modularizados
-│   │   ├── estilos.css     # Archivo principal de importación
-│   │   ├── variables.css   # Variables y tokens de diseño
-│   │   ├── base.css        # Estilos base y layout
-│   │   ├── buttons.css     # Botones y controles
-│   │   ├── forms.css       # Formularios y inputs
-│   │   ├── tables.css      # Tablas y visualización
-│   │   ├── modals.css      # Ventanas modales
-│   │   ├── movements.css   # Módulo de movimientos
-│   │   └── notifications.css # Sistema de notificaciones
-│   ├── 📁 html/            # Interfaces de usuario
-│   │   ├── menu.html       # Menú principal
-│   │   ├── productos.html  # Gestión de productos
-│   │   └── movimientos.html # Gestión de movimientos
-│   └── 📁 js/              # Lógica del frontend
-│       ├── menu.js         # Controlador del menú
-│       ├── productos.js    # Controlador de productos
-│       └── movimientos.js  # Controlador de movimientos
-└── 📁 assets/              # Recursos estáticos
-    ├── logo.ico            # Icono de la aplicación
-    └── img/                # Imágenes y logos
+```bash
+npm install
 ```
 
----
+3. **Inicializar la base de datos**
+```bash
+# La base de datos se inicializa automáticamente al ejecutar la aplicación
+```
 
-## 💻 Tecnologías Utilizadas
+4. **Ejecutar la aplicación**
+```bash
+npm start
+```
 
-### 🖥️ **Frontend**
-- **HTML5**: Estructura semántica moderna
-- **CSS3**: Sistema modular con variables CSS
-- **JavaScript ES6+**: Programación orientada a objetos
-- **Electron**: Framework de aplicaciones de escritorio
-
-### 🗄️ **Backend**
-- **Node.js**: Runtime de JavaScript
-- **SQLite3**: Base de datos embebida
-- **IPC**: Comunicación segura entre procesos
-
-### 🛠️ **Herramientas**
-- **npm**: Gestión de dependencias
-- **VS Code**: Entorno de desarrollo recomendado
-
----
+### **Scripts disponibles**
+```json
+{
+  "start": "electron .",
+  "dev": "electron . --dev",
+  "build": "electron-builder",
+  "pack": "electron-builder --dir"
+}
+```
 
 ## 📖 Guía de Uso
 
-### 🏠 **Pantalla Principal**
-La aplicación se inicia mostrando el módulo de movimientos con:
-- Formulario para registrar entradas/salidas
-- Información de stock en tiempo real
-- Tabla de movimientos con filtros
-- Resumen general del inventario
+### **1. Gestión de Productos**
 
-### 📦 **Gestión de Productos**
-Desde el menú principal puedes:
-1. **Agregar productos** con nombre, precio y miniatura
-2. **Editar información** de productos existentes
-3. **Eliminar productos** (con confirmación)
-4. **Ver stock actual** de todos los productos
+#### **Agregar Producto**
+1. Navegue a **Productos** desde el menú principal
+2. Haga clic en **"Agregar Producto"**
+3. Complete el formulario:
+   - **Nombre**: Nombre del producto (obligatorio)
+   - **Miniatura**: URL de imagen (opcional)
+4. Haga clic en **"Guardar"**
 
-### 📊 **Movimientos de Inventario**
-Para registrar movimientos:
-1. **Seleccionar tipo** (Entrada o Salida)
-2. **Agregar productos** uno por uno con cantidades
-3. **Ver información de stock** proyectado en tiempo real
-4. **Registrar movimiento** con descripción y observaciones
+#### **Editar Producto**
+1. Localice el producto en la tabla
+2. Haga clic en el botón **"Editar"** (✏️)
+3. Modifique los campos necesarios
+4. Guarde los cambios
 
-### 🔍 **Filtros y Búsqueda**
-Filtrar movimientos por:
-- **Tipo de movimiento** (Entradas/Salidas)
-- **Producto específico**
-- **Rango de fechas**
-- **Combinación de filtros**
+#### **Eliminar Producto**
+1. Localice el producto en la tabla
+2. Haga clic en el botón **"Eliminar"** (🗑️)
+3. Confirme la acción
 
----
+### **2. Registro de Movimientos**
 
-## 🏗️ Arquitectura del Código
+#### **Entrada de Productos (Compras/Reposición)**
+1. Navegue a **Movimientos**
+2. Seleccione **"Entrada"**
+3. Complete el formulario:
+   - **Producto**: Seleccione de la lista o busque
+   - **Cantidad**: Unidades a agregar
+   - **Precio Unitario**: Costo por unidad
+   - **Descripción**: Motivo de la entrada
+4. Haga clic en **"Registrar Entrada"**
 
-### 🎨 **Sistema CSS Modular**
+#### **Salida de Productos (Ventas/Gastos)**
+1. Seleccione **"Salida"**
+2. Complete el formulario similar a entrada
+3. Para **salidas grupales**:
+   - Agregue múltiples productos
+   - Configure cantidades individuales
+   - Registre todo en una sola transacción
 
-El CSS está organizado en 8 módulos especializados:
+### **3. Generación de Reportes**
 
-```css
-/* estilos.css - Punto de entrada */
-@import url('./variables.css');    /* Tokens de diseño */
-@import url('./base.css');         /* Fundamentos */
-@import url('./buttons.css');      /* Botones */
-@import url('./forms.css');        /* Formularios */
-@import url('./tables.css');       /* Tablas */
-@import url('./modals.css');       /* Modales */
-@import url('./movements.css');    /* Movimientos */
-@import url('./notifications.css'); /* Notificaciones */
-```
+#### **Reporte Diario**
+1. Navegue a **Reportes**
+2. En la pestaña **"Reporte Diario"**
+3. Seleccione la fecha deseada
+4. Haga clic en **"Generar Reporte"**
+5. Visualice métricas y tabla detallada
 
-**Beneficios**:
-- 🔍 **Fácil mantenimiento**: Cada módulo tiene responsabilidad específica
-- 🚀 **Escalabilidad**: Agregar nuevos componentes sin conflictos
-- 👥 **Colaboración**: Múltiples desarrolladores sin pisarse
-- ⚡ **Performance**: Posibilidad de carga condicional
+#### **Reporte Mensual**
+1. Seleccione la pestaña **"Reporte Mensual"**
+2. Elija año y mes
+3. Genere el reporte para ver:
+   - Resumen mensual por producto
+   - Días con actividad
+   - Indicadores de rendimiento
 
-### 💻 **JavaScript Moderno**
+#### **Historial de Producto**
+1. Seleccione **"Historial Producto"**
+2. Elija el producto específico
+3. Opcionalmente configure rango de fechas
+4. Visualice todos los movimientos del producto
 
-Arquitectura basada en clases con separación de responsabilidades:
+## 🔧 Arquitectura del Sistema
 
-```javascript
-// Gestión de estado centralizada
-class AppState {
-  constructor() {
-    this.productos = [];
-    this.movimientos = [];
-  }
-  // Métodos para manipulación segura
-}
+### **Patrón de Arquitectura**
+Kontrol utiliza una arquitectura **MVC (Model-View-Controller)** adaptada para Electron:
 
-// Controlador principal
-class MovimientosController {
-  constructor() {
-    this.dom = new DOMManager();      // Referencias DOM
-    this.state = new AppState();      // Estado de aplicación
-  }
-  // Lógica de negocio organizada
-}
+- **Model**: Módulos de base de datos (`database/`)
+- **View**: Páginas HTML y CSS (`src/html/`, `src/css/`)
+- **Controller**: Scripts JavaScript y IPC (`src/js/`, `ipc/`)
 
-// Gestión de datos separada
-class DataManager {
-  static async cargarProductos() { /* API calls */ }
-  static async registrarMovimiento() { /* Database ops */ }
-}
-```
-
-### 🗄️ **Base de Datos**
-
-Esquema optimizado con relaciones claras:
-
-```sql
--- Tabla principal de productos
-CREATE TABLE productos (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  nombre TEXT NOT NULL,
-  precio REAL NOT NULL,
-  stock INTEGER NOT NULL DEFAULT 0
-);
-
--- Movimientos grupales (entradas/salidas)
-CREATE TABLE salidas (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  tipo TEXT NOT NULL,              -- 'entrada' o 'salida'
-  descripcion TEXT NOT NULL,
-  observaciones TEXT,
-  fecha DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
--- Detalle de productos por movimiento
-CREATE TABLE salidas_detalle (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  salida_id INTEGER NOT NULL,
-  producto_id INTEGER NOT NULL,
-  cantidad INTEGER NOT NULL,
-  stock_anterior INTEGER NOT NULL,
-  stock_actual INTEGER NOT NULL,
-  FOREIGN KEY (salida_id) REFERENCES salidas (id) ON DELETE CASCADE,
-  FOREIGN KEY (producto_id) REFERENCES productos (id)
-);
-```
-
----
-
-## 🔧 Configuración Avanzada
-
-### ⚙️ **Variables de Configuración**
-
-En `src/js/movimientos.js`:
+### **Comunicación IPC**
+La comunicación entre el proceso principal y los procesos renderer se maneja mediante:
 
 ```javascript
-const CONFIG = {
-  STOCK_MINIMO: 5,           // Umbral para alertas de stock bajo
-  MAX_PRODUCTOS_TAG: 3,      // Productos visibles en tabla antes de "..."
-  ANIMATION_DELAY: 50        // Delay entre animaciones (ms)
-};
+// Renderer Process (Frontend)
+const resultado = await window.electronAPI.invoke('productos:obtener');
+
+// Main Process (Backend)
+ipcMain.handle('productos:obtener', async () => {
+  return await obtenerProductos();
+});
 ```
 
-### 🎨 **Personalización de Tema**
+### **Sistema de Notificaciones**
+Sistema centralizado para feedback al usuario:
 
-En `src/css/variables.css`:
+```javascript
+NotificationManager.success('Operación exitosa');
+NotificationManager.error('Error en la operación');
+NotificationManager.warning('Advertencia importante');
+NotificationManager.info('Información relevante');
+```
+
+## 🎨 Sistema de Estilos
+
+### **Variables CSS**
+El sistema utiliza variables CSS para mantener consistencia:
 
 ```css
 :root {
   /* Colores principales */
-  --primary-color: #3498db;
-  --secondary-color: #2c3e50;
-  --accent-color: #e74c3c;
+  --accent-primary: #2196f3;
+  --accent-success: #4caf50;
+  --accent-warning: #ff9800;
+  --accent-danger: #f44336;
   
-  /* Espaciados */
+  /* Espaciado */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
+  
+  /* Tipografía */
+  --font-family-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
 }
 ```
 
-### 🔒 **Configuración de Seguridad**
+### **Componentes Reutilizables**
+- **Botones**: `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-danger`
+- **Formularios**: `.form-group`, `.form-input`, `.form-select`
+- **Tablas**: `.data-table`, `.table-container`, `.table-actions`
+- **Modales**: `.modal`, `.modal-content`, `.modal-header`
 
-La aplicación implementa:
-- **Context Isolation**: APIs expuestas de forma segura
-- **Sanitización**: Prevención de XSS en inputs
-- **Validación**: Verificación de datos en cliente y servidor
+## 🔒 Seguridad y Mejores Prácticas
 
----
+### **Seguridad Electron**
+- ✅ **Context Isolation**: Habilitado para aislar contextos
+- ✅ **Node Integration**: Deshabilitado en renderer
+- ✅ **Preload Scripts**: Para exposición segura de APIs
+- ✅ **CSP**: Content Security Policy implementado
 
-## 🐛 Solución de Problemas
+### **Validación de Datos**
+- ✅ Validación en frontend y backend
+- ✅ Sanitización de inputs de usuario
+- ✅ Manejo de errores robusto
+- ✅ Transacciones de base de datos
 
-### ❌ **Problemas Comunes**
-
-#### Error: "Cannot find module sqlite3"
-```bash
-# Reinstalar sqlite3 nativo para Electron
-npm rebuild sqlite3 --runtime=electron --target=$(electron --version) --disturl=https://electronjs.org/headers
+### **Gestión de Errores**
+```javascript
+try {
+  const resultado = await operacionBaseDatos();
+  NotificationManager.success('Operación exitosa');
+} catch (error) {
+  console.error('Error:', error);
+  NotificationManager.error(`Error: ${error.message}`);
+}
 ```
 
-#### Error: "Base de datos bloqueada"
+## 📊 Indicadores y Métricas
+
+### **Métricas Empresariales**
+- **Ventas Totales**: Ingresos por período
+- **Compras Totales**: Egresos por período  
+- **Utilidad Total**: Ganancia neta calculada
+- **Productos Activos**: Productos con movimientos
+- **Rotación de Inventory**: Frecuencia de movimientos
+
+### **Análisis de Rendimiento**
+- **Días con Actividad**: Días operativos del negocio
+- **Productos Más Vendidos**: Ranking por volumen
+- **Tendencias Temporales**: Patrones de venta/compra
+- **Stock Crítico**: Productos con bajo inventario
+
+## 🚀 Roadmap y Mejoras Futuras
+
+### **Versión 2.0 (Planificada)**
+- [ ] **Dashboard Analítico**: Gráficos y visualizaciones
+- [ ] **Códigos de Barras**: Integración con lectores
+- [ ] **Múltiples Almacenes**: Gestión multi-ubicación
+- [ ] **Usuarios y Permisos**: Sistema de roles
+- [ ] **Sincronización Cloud**: Backup en la nube
+- [ ] **API REST**: Integración con sistemas externos
+
+### **Mejoras Técnicas**
+- [ ] **TypeScript**: Migración para mejor tipado
+- [ ] **Testing**: Suite de pruebas automatizadas
+- [ ] **CI/CD**: Pipeline de integración continua
+- [ ] **Docker**: Contenarización para despliegue
+- [ ] **Logging**: Sistema de logs avanzado
+
+## 🐛 Resolución de Problemas
+
+### **Problemas Comunes**
+
+#### **"Error de base de datos"**
 ```bash
-# Cerrar completamente la aplicación antes de reiniciar
+# Solución: Eliminar y reinicializar BD
+rm database/kontrol.db
+npm start
 ```
 
-#### CSS no se actualiza
+#### **"Electron no inicia"**
 ```bash
-# Limpiar caché del navegador en modo desarrollo
-Ctrl + F5 (Windows/Linux)
-Cmd + Shift + R (macOS)
+# Solución: Reinstalar dependencias
+rm -rf node_modules package-lock.json
+npm install
 ```
 
-### 📝 **Logs y Debugging**
+#### **"Reportes no cargan"**
+- Verificar que existan datos en la base de datos
+- Revisar logs en consola de desarrollador (F12)
+- Confirmar que los IPCs estén registrados
 
-Los logs se muestran en:
-- **Consola del desarrollador**: F12 en la aplicación
-- **Terminal**: Mensajes del proceso principal
-- **Base de datos**: Errores SQL en consola
+### **Logs y Depuración**
+```javascript
+// Activar modo desarrollo
+npm run dev
 
----
+// Ver logs en consola
+console.log('Debug info:', data);
+
+// Abrir DevTools
+Ctrl + Shift + I
+```
 
 ## 🤝 Contribución
 
-### 🔀 **Cómo Contribuir**
-
+### **Cómo Contribuir**
 1. **Fork** el repositorio
-2. **Crear branch** para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. **Commit** tus cambios (`git commit -m 'Agregar nueva funcionalidad'`)
-4. **Push** al branch (`git push origin feature/nueva-funcionalidad`)
-5. **Crear Pull Request**
+2. **Clone** tu fork localmente
+3. **Crea** una rama para tu feature: `git checkout -b feature/nueva-funcionalidad`
+4. **Commit** tus cambios: `git commit -m 'Agregar nueva funcionalidad'`
+5. **Push** a la rama: `git push origin feature/nueva-funcionalidad`
+6. **Crea** un Pull Request
 
-### 📏 **Estándares de Código**
+### **Estándares de Código**
+- **Nomenclatura**: camelCase para variables, PascalCase para clases
+- **Comentarios**: JSDoc para funciones importantes
+- **Estructura**: Mantener organización de carpetas
+- **Estilos**: Seguir convenciones CSS establecidas
 
-- **JavaScript**: ES6+, clases para organización
-- **CSS**: Variables CSS, nomenclatura BEM cuando aplique
-- **Commits**: Mensajes descriptivos en español
-- **Documentación**: Comentarios para funciones complejas
-
-### 🧪 **Testing**
-
-Antes de hacer commit:
-- ✅ Probar todas las funcionalidades principales
-- ✅ Verificar responsive design
-- ✅ Revisar consola de errores
-- ✅ Validar performance
-
----
-
-## 📋 Changelog
-
-### v1.0.0 (Julio 2025)
-- ✅ **MAJOR**: Refactorización completa del sistema CSS
-- ✅ **FEATURE**: Información de stock en tiempo real
-- ✅ **FEATURE**: Filtros avanzados por múltiples productos
-- ✅ **IMPROVEMENT**: Arquitectura JavaScript orientada a objetos
-- ✅ **IMPROVEMENT**: Base de datos optimizada con índices
-- ✅ **FIX**: Corrección de lógica de filtros
-- ✅ **DOCS**: Documentación completa del proyecto
-
----
-
-## 📞 Soporte
-
-### 🆘 **Obtener Ayuda**
-
-- **Issues**: Reportar bugs en GitHub Issues
-- **Documentación**: Consultar archivos README.md en cada módulo
-- **Auditoría**: Ver `PROJECT-AUDIT.md` para detalles técnicos
-
-### 🏷️ **Versiones**
-
-- **Actual**: v1.0.0 (Estable)
-- **Próxima**: v1.1.0 (Funcionalidades adicionales)
-
----
+### **Reportar Bugs**
+Utiliza el sistema de Issues de GitHub con:
+- **Título descriptivo**
+- **Pasos para reproducir**
+- **Comportamiento esperado vs actual**
+- **Capturas de pantalla** (si aplica)
+- **Información del sistema**
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
+Este proyecto está bajo la **Licencia MIT**. Consulta el archivo `LICENSE` para más detalles.
 
----
+```
+MIT License
 
-## 🙏 Agradecimientos
+Copyright (c) 2025 Carlos DB
 
-- **Electron Team**: Por el framework excepcional
-- **SQLite**: Por la base de datos confiable
-- **VS Code**: Por el excelente entorno de desarrollo
-- **Comunidad**: Por las mejores prácticas y patrones
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
----
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-**Desarrollado con ❤️ para gestión eficiente de inventarios**
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
-*Última actualización: 17 de julio de 2025*
+## 👨‍💻 Autor
+
+**Carlos DB** - [@CarlosDB25](https://github.com/CarlosDB25)
+
+- **GitHub**: [https://github.com/CarlosDB25](https://github.com/CarlosDB25)
+- **Email**: carlosdiazmaerio@gmail.com
+
+
+<div align="center">
+
+**⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub ⭐**
+
+![Kontrol](assets/img/icono.png)
+
+**Kontrol - Control Total de tu Inventario** 📊
+
+</div>

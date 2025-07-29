@@ -428,11 +428,11 @@ function convertirArchivoABase64(archivo) {
 
 // Función para volver al menú principal
 function volverAlMenu() {
-  // Por ahora mostrar una notificación, más tarde se puede navegar a otra página
-  notificarInfo('Función de menú principal en desarrollo');
-  
-  // TODO: Implementar navegación al menú principal cuando esté listo
-  // window.location.href = '../html/menu-principal.html';
+  if (window.electronAPI) {
+    window.electronAPI.loadPage('menu');
+  } else {
+    window.location.href = 'menu.html';
+  }
 }
 
 // Hacemos accesibles funciones al HTML globalmente

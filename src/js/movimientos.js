@@ -1039,8 +1039,11 @@ class MovimientosController {
   }
 
   volverAlMenu() {
-    NotificationManager.info('Navegando al menú principal...');
-    // TODO: Implementar navegación
+    if (window.electronAPI) {
+      window.electronAPI.loadPage('menu');
+    } else {
+      window.location.href = 'menu.html';
+    }
   }
 }
 

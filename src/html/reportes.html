@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kontrol - Reportes y Análisis</title>
+  <link rel="icon" type="image/png" href="../../assets/img/icono.png">
+  <link rel="stylesheet" href="../css/estilos.css" />
+  <link rel="stylesheet" href="../css/reportes.css" />
+  <link rel="stylesheet" href="../css/notifications.css" />
+  <script defer src="../js/shared/notifications.js"></script>
+  <script defer src="../js/reportes.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Botón Home/Volver -->
+    <div class="home-button-container">
+      <button class="home-button" onclick="volverAlMenu()" title="Volver al Menú Principal">
+        <img src="../../assets/img/icono.png" alt="Home" class="home-icon" />
+        <span class="home-text">Menú Principal</span>
+      </button>
+    </div>
+
+    <header class="app-header">
+      <div class="header-logo">
+        <h1>📊 Reportes y Análisis</h1>
+      </div>
+    </header>
+
+    <!-- Panel de Control de Reportes -->
+    <div class="reports-control-panel fade-in-up">
+      <div class="control-title">🎯 Panel de Control</div>
+      <div class="control-tabs">
+        <button class="tab-button active" data-tab="daily">
+          <span class="tab-icon">📅</span>
+          Reporte Diario
+        </button>
+        <button class="tab-button" data-tab="monthly">
+          <span class="tab-icon">📈</span>
+          Reporte Mensual
+        </button>
+        <button class="tab-button" data-tab="history">
+          <span class="tab-icon">📦</span>
+          Historial Producto
+        </button>
+      </div>
+
+      <!-- Controles de Fecha -->
+      <div class="date-controls">
+        <!-- Panel Diario -->
+        <div class="date-panel active" id="dailyControls">
+          <div class="date-group">
+            <label for="dailyDate">📅 Fecha:</label>
+            <input type="date" id="dailyDate" class="date-input">
+            <button class="btn btn-primary" onclick="cargarReporteDiario()">
+              🔍 Generar Reporte
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel Mensual -->
+        <div class="date-panel" id="monthlyControls">
+          <div class="date-group">
+            <label for="monthlyMonth">📅 Mes:</label>
+            <select id="monthlyMonth" class="select-input">
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+            <label for="monthlyYear">📅 Año:</label>
+            <select id="monthlyYear" class="select-input"></select>
+            <button class="btn btn-primary" onclick="cargarReporteMensual()">
+              📈 Generar Reporte
+            </button>
+          </div>
+        </div>
+
+        <!-- Panel Historial -->
+        <div class="date-panel" id="historyControls">
+          <div class="date-group">
+            <label for="productSelect">📦 Producto:</label>
+            <select id="productSelect" class="select-input">
+              <option value="">Seleccione un producto...</option>
+            </select>
+            <label for="historyFrom">Desde:</label>
+            <input type="date" id="historyFrom" class="date-input">
+            <label for="historyTo">Hasta:</label>
+            <input type="date" id="historyTo" class="date-input">
+            <button class="btn btn-primary" onclick="cargarHistorialProducto()">
+              📦 Ver Historial
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen de Indicadores -->
+    <div class="indicators-summary fade-in-up" id="indicatorsSummary" style="display: none;">
+      <div class="summary-title">📈 Indicadores Principales</div>
+      <div class="indicators-grid">
+        <div class="indicator-card success">
+          <div class="indicator-icon">💰</div>
+          <div class="indicator-content">
+            <div class="indicator-value" id="totalVentas">$0.00</div>
+            <div class="indicator-label">Total Ventas</div>
+          </div>
+        </div>
+        <div class="indicator-card warning">
+          <div class="indicator-icon">🛒</div>
+          <div class="indicator-content">
+            <div class="indicator-value" id="totalCompras">$0.00</div>
+            <div class="indicator-label">Total Compras</div>
+          </div>
+        </div>
+        <div class="indicator-card info">
+          <div class="indicator-icon">📊</div>
+          <div class="indicator-content">
+            <div class="indicator-value" id="utilidadTotal">$0.00</div>
+            <div class="indicator-label">Utilidad Total</div>
+          </div>
+        </div>
+        <div class="indicator-card primary">
+          <div class="indicator-icon">📦</div>
+          <div class="indicator-content">
+            <div class="indicator-value" id="productosActividad">0</div>
+            <div class="indicator-label">Productos con Actividad</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Resultados -->
+    <div class="table-container fade-in-up" id="reportTable" style="display: none;">
+      <div class="table-header">
+        <h2 class="table-title" id="tableTitle">
+          📊 Reporte
+        </h2>
+        <div class="table-actions">
+          <button class="btn btn-secondary btn-icon" onclick="exportarReporte()" title="Exportar a CSV">
+            📥 Exportar
+          </button>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead id="reportTableHead">
+            <!-- Encabezados dinámicos -->
+          </thead>
+          <tbody id="reportTableBody">
+            <!-- Datos dinámicos -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tabla de Días con Actividad (Solo Mensual) -->
+    <div class="table-container fade-in-up" id="activityTable" style="display: none;">
+      <div class="table-header">
+        <h2 class="table-title">📅 Días con Actividad</h2>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead id="activityTableHead">
+            <!-- Encabezados dinámicos -->
+          </thead>
+          <tbody id="activityTableBody">
+            <!-- Datos dinámicos -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Estado de Carga -->
+    <div class="loading-state" id="loadingState" style="display: none;">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Generando reporte...</div>
+    </div>
+
+    <!-- Estado Vacío -->
+    <div class="empty-state fade-in-up" id="emptyState" style="display: none;">
+      <div class="empty-icon">📊</div>
+      <h3>Sin Datos para Mostrar</h3>
+      <p>No hay información disponible para los criterios seleccionados.</p>
+      <button class="btn btn-primary" onclick="inicializarReportes()">
+        🔄 Reintentar
+      </button>
+    </div>
+  </div>
+
+  <!-- Área de notificaciones -->
+  <div id="notificationArea"></div>
+</body>
+</html>

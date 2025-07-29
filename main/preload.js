@@ -15,3 +15,10 @@ contextBridge.exposeInMainWorld('api', {
   obtenerDetalleSalida: (movimientoId) => ipcRenderer.invoke('movimientos:obtenerDetalle', movimientoId),
   obtenerMovimientosPorProducto: (productoId) => ipcRenderer.invoke('movimientos:obtenerPorProducto', productoId)
 });
+
+// API adicional para navegación
+contextBridge.exposeInMainWorld('electronAPI', {
+  loadPage: (page) => ipcRenderer.invoke('navigate-to', page),
+  obtenerResumenRapido: () => ipcRenderer.invoke('obtener-resumen-rapido'),
+  invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args)
+});

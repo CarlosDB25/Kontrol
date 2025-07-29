@@ -13,4 +13,6 @@
 @import url('./tables.css');      /* Tablas y visualización de datos */
 @import url('./modals.css');      /* Modales y overlays */
 @import url('./movements.css');   /* Módulo específico de movimientos */
+@import url('./reportes.css');    /* Módulo específico de reportes y análisis */
+@import url('./menu.css');        /* Módulo específico del menú principal */
 @import url('./notifications.css'); /* Notificaciones y estados */
