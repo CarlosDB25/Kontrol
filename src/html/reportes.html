@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="../css/estilos.css" />
   <link rel="stylesheet" href="../css/reportes.css" />
   <link rel="stylesheet" href="../css/notifications.css" />
+  <!-- Librerías para exportación PDF -->
+  <script src="../../node_modules/jspdf/dist/jspdf.umd.min.js"></script>
+  <script src="../../node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.min.js"></script>
   <script defer src="../js/shared/notifications.js"></script>
   <script defer src="../js/shared/utils.js"></script>
   <script defer src="../js/reportes.js"></script>
@@ -145,8 +148,8 @@
           📊 Reporte
         </h2>
         <div class="table-actions">
-          <button class="btn btn-secondary btn-icon" onclick="exportarReporte()" title="Exportar a CSV">
-            📥 Exportar
+          <button class="btn btn-secondary btn-icon" onclick="exportarReporte()" title="Exportar a PDF con Logo">
+            📄Exportar PDF
           </button>
         </div>
       </div>

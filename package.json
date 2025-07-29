@@ -10,6 +10,8 @@
     "electron": "^29.0.0"
   },
   "dependencies": {
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "sqlite3": "^5.1.6"
   }
 }

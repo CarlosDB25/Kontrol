@@ -5,7 +5,7 @@ async function obtenerReporteDiario(fecha) {
   return new Promise((resolve, reject) => {
     console.log('📅 Obteniendo reporte diario para:', fecha);
     
-    // Reporte detallado por producto
+    // Reporte detallado por producto - CONSULTA CORREGIDA
     db.all(`
       SELECT 
         p.id,
@@ -18,14 +18,10 @@ async function obtenerReporteDiario(fecha) {
       FROM productos p
       LEFT JOIN movimientos_detalle md ON p.id = md.producto_id
       LEFT JOIN movimientos m ON md.movimiento_id = m.id AND DATE(m.fecha) = ?
-      WHERE EXISTS (
-        SELECT 1 FROM movimientos_detalle md2 
-        JOIN movimientos m2 ON md2.movimiento_id = m2.id 
-        WHERE md2.producto_id = p.id AND DATE(m2.fecha) = ?
-      )
       GROUP BY p.id, p.nombre, p.stock_actual
+      HAVING (unidades_vendidas > 0 OR unidades_compradas > 0)
       ORDER BY total_ventas DESC
-    `, [fecha, fecha], (err, rows) => {
+    `, [fecha], (err, rows) => {
       if (err) {
         console.error('❌ Error en obtenerReporteDiario:', err);
         reject(err);

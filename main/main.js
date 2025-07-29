@@ -19,11 +19,37 @@ function createWindow() {
     }
   });
 
-  // 👇 Oculta el menú por completo
-  Menu.setApplicationMenu(null);
+  // 👇 Crear menú de desarrollo
+  const template = [
+    {
+      label: 'Desarrollo',
+      submenu: [
+        {
+          label: 'Herramientas de Desarrollador',
+          accelerator: 'F12',
+          click: () => {
+            mainWindow.webContents.openDevTools();
+          }
+        },
+        {
+          label: 'Recargar',
+          accelerator: 'F5',
+          click: () => {
+            mainWindow.reload();
+          }
+        }
+      ]
+    }
+  ];
+  
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
   
   mainWindow.maximize(); // ✅ Esta línea abre la ventana maximizada
   mainWindow.loadFile(path.join(__dirname, '../src/html/menu.html'));
+  
+  // 👇 Abrir DevTools automáticamente en desarrollo
+  // mainWindow.webContents.openDevTools();
 }
 
 // Handler para navegación entre páginas

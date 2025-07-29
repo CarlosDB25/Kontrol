@@ -161,7 +161,7 @@ async function cargarReporteDiario() {
     mostrarIndicadoresDiarios(resumen);
     mostrarTablaDiaria(reporte, fecha);
     
-    currentReportData = { tipo: 'diario', fecha, datos: reporte, resumen };
+    currentReportData = { tipo: 'diario', fecha, reporte, resumen };
     mostrarNotificacion(`Reporte diario generado para ${formatearFecha(fecha, true)}`, 'success');
     
   } catch (error) {
@@ -208,7 +208,7 @@ async function cargarReporteMensual() {
       mostrarTablaDiasActividad(diasActividad);
     }
     
-    currentReportData = { tipo: 'mensual', año, mes, datos: reporte, resumen, diasActividad };
+    currentReportData = { tipo: 'mensual', año, mes, reporte, resumen, diasActividad };
     
     const nombreMes = document.querySelector(`#monthlyMonth option[value="${mes}"]`).textContent;
     mostrarNotificacion(`Reporte mensual generado para ${nombreMes} ${año}`, 'success');
@@ -256,7 +256,7 @@ async function cargarHistorialProducto() {
     mostrarIndicadoresHistorial(indicadores);
     mostrarTablaHistorial(historial, productoId);
     
-    currentReportData = { tipo: 'historial', productoId, fechaInicio, fechaFin, datos: historial };
+    currentReportData = { tipo: 'historial', productoId, fechaInicio, fechaFin, reporte: historial };
     
     const nombreProducto = document.querySelector(`#productSelect option[value="${productoId}"]`).textContent;
     mostrarNotificacion(`Historial generado para ${nombreProducto}`, 'success');
@@ -328,7 +328,8 @@ function mostrarTablaDiaria(datos, fecha) {
     </tr>
   `;
   
-  document.getElementById('reportTableBody').innerHTML = datos.map(item => `
+  const filas = datos.map(item => {
+    return `
     <tr class="report-table-row">
       <td><strong>${item.producto_nombre || 'Sin nombre'}</strong></td>
       <td class="text-center">${item.unidades_vendidas || 0}</td>
@@ -340,7 +341,9 @@ function mostrarTablaDiaria(datos, fecha) {
       </td>
       <td class="text-center">${item.stock_actual || 0}</td>
     </tr>
-  `).join('');
+  `}).join('');
+  
+  document.getElementById('reportTableBody').innerHTML = filas;
   
   document.getElementById('reportTable').style.display = 'block';
   document.getElementById('activityTable').style.display = 'none';
@@ -512,7 +515,7 @@ function limpiarResultados() {
 }
 
 // ================================================
-// EXPORTACIÓN
+// EXPORTACIÓN PDF CON LOGO
 // ================================================
 
 function exportarReporte() {
@@ -522,64 +525,243 @@ function exportarReporte() {
   }
 
   try {
-    let csvContent = '';
-    let filename = '';
-
+    mostrarNotificacion('Generando PDF...', 'info');
+    
     switch (currentReportData.tipo) {
       case 'diario':
-        csvContent = generarCSVDiario(currentReportData);
-        filename = `reporte_diario_${currentReportData.fecha}.csv`;
+        generarPDFDiario(currentReportData);
         break;
       case 'mensual':
-        csvContent = generarCSVMensual(currentReportData);
-        filename = `reporte_mensual_${currentReportData.año}_${currentReportData.mes}.csv`;
+        generarPDFMensual(currentReportData);
         break;
       case 'historial':
-        csvContent = generarCSVHistorial(currentReportData);
-        filename = `historial_producto_${currentReportData.productoId}.csv`;
+        generarPDFHistorial(currentReportData);
         break;
     }
-
-    // Crear y descargar archivo
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', filename);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    mostrarNotificacion('Reporte exportado exitosamente', 'success');
   } catch (error) {
     console.error('Error exportando reporte:', error);
     mostrarNotificacion('Error al exportar el reporte', 'error');
   }
 }
 
-function generarCSVDiario(data) {
-  const headers = 'Producto,Unidades Vendidas,Total Ventas,Unidades Compradas,Total Compras,Utilidad del Día,Stock Actual\n';
-  const rows = data.datos.map(item => 
-    `"${item.producto_nombre}",${item.unidades_vendidas},${item.total_ventas},${item.unidades_compradas},${item.total_compras},${item.utilidad_dia},${item.stock_actual}`
-  ).join('\n');
-  return headers + rows;
+// Función para cargar imagen como base64
+function loadImageAsBase64(imagePath) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = this.width;
+      canvas.height = this.height;
+      ctx.drawImage(this, 0, 0);
+      
+      try {
+        const dataURL = canvas.toDataURL('image/png');
+        resolve(dataURL);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    
+    img.onerror = () => reject(new Error('No se pudo cargar la imagen'));
+    img.src = imagePath;
+  });
 }
 
-function generarCSVMensual(data) {
-  const headers = 'Producto,Unidades Vendidas,Total Ventas,Unidades Compradas,Total Compras,Utilidad Mensual,Días con Ventas,Stock Actual\n';
-  const rows = data.datos.map(item => 
-    `"${item.producto_nombre}",${item.unidades_vendidas_mes},${item.total_ventas_mes},${item.unidades_compradas_mes},${item.total_compras_mes},${item.utilidad_mes},${item.dias_con_ventas},${item.stock_actual}`
-  ).join('\n');
-  return headers + rows;
+// Función para crear el encabezado con logo
+async function crearEncabezadoPDF(doc, titulo, fecha = null) {
+  try {
+    // Cargar logo
+    const logoBase64 = await loadImageAsBase64('../../assets/img/variedades/variedades_jl.png');
+    
+    // Agregar logo (esquina superior izquierda)
+    doc.addImage(logoBase64, 'PNG', 20, 15, 40, 25);
+    
+    // Título principal
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(titulo, 105, 25, { align: 'center' });
+    
+    // Fecha si se proporciona
+    if (fecha) {
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(fecha, 105, 35, { align: 'center' });
+    }
+    
+    // Línea separadora
+    doc.setLineWidth(0.5);
+    doc.line(20, 50, 190, 50);
+    
+    return 60; // Retorna la posición Y donde termina el encabezado
+  } catch (error) {
+    console.warn('No se pudo cargar el logo, continuando sin él:', error);
+    
+    // Crear encabezado sin logo
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text(titulo, 105, 30, { align: 'center' });
+    
+    if (fecha) {
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      doc.text(fecha, 105, 40, { align: 'center' });
+    }
+    
+    doc.setLineWidth(0.5);
+    doc.line(20, 50, 190, 50);
+    
+    return 60;
+  }
 }
 
-function generarCSVHistorial(data) {
-  const headers = 'Fecha,Tipo,Cantidad,Precio Unitario,Subtotal,Stock Anterior,Stock Nuevo,Descripción\n';
-  const rows = data.datos.map(mov => 
-    `"${mov.fecha}","${mov.tipo}",${mov.cantidad},${mov.precio_unitario},${mov.subtotal},${mov.stock_anterior},${mov.stock_nuevo},"${mov.descripcion || ''}"`
-  ).join('\n');
-  return headers + rows;
+async function generarPDFDiario(data) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  const fechaFormateada = formatearFecha(data.fecha, true);
+  const yInicial = await crearEncabezadoPDF(doc, 'Reporte Diario de Ventas', fechaFormateada);
+  
+  // Resumen del día
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Resumen del Día', 20, yInicial + 10);
+  
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Total Ventas: $${formatearNumero(data.resumen.totalVentas || 0)}`, 20, yInicial + 25);
+  doc.text(`Total Compras: $${formatearNumero(data.resumen.totalCompras || 0)}`, 20, yInicial + 35);
+  doc.text(`Utilidad Total: $${formatearNumero(data.resumen.utilidadTotal || 0)}`, 20, yInicial + 45);
+  
+  // Tabla de productos del día
+  if (data.reporte && data.reporte.length > 0) {
+    const columnas = ['Producto', 'U. Vendidas', 'Total Ventas', 'U. Compradas', 'Total Compras', 'Utilidad'];
+    const filas = data.reporte.map(item => [
+      item.producto_nombre || 'N/A',
+      item.unidades_vendidas || 0,
+      `$${formatearNumero(item.total_ventas || 0)}`,
+      item.unidades_compradas || 0,
+      `$${formatearNumero(item.total_compras || 0)}`,
+      `$${formatearNumero(item.utilidad_dia || 0)}`
+    ]);
+    
+    doc.autoTable({
+      head: [columnas],
+      body: filas,
+      startY: yInicial + 60,
+      theme: 'grid',
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [52, 152, 219] }
+    });
+  }
+  
+  const filename = `reporte_diario_${data.fecha}.pdf`;
+  doc.save(filename);
+  mostrarNotificacion('PDF generado exitosamente', 'success');
+}
+
+async function generarPDFMensual(data) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  const nombreMes = document.querySelector(`#monthlyMonth option[value="${data.mes}"]`)?.textContent || data.mes;
+  const fechaFormateada = `${nombreMes} ${data.año}`;
+  const yInicial = await crearEncabezadoPDF(doc, 'Reporte Mensual de Ventas', fechaFormateada);
+  
+  // Resumen mensual
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Resumen del Mes', 20, yInicial + 10);
+  
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Total Ventas: $${formatearNumero(data.resumen.totalVentas || 0)}`, 20, yInicial + 25);
+  doc.text(`Total Compras: $${formatearNumero(data.resumen.totalCompras || 0)}`, 20, yInicial + 35);
+  doc.text(`Utilidad Total: $${formatearNumero(data.resumen.utilidadTotal || 0)}`, 20, yInicial + 45);
+  
+  // Tabla principal por productos
+  if (data.reporte && data.reporte.length > 0) {
+    const columnas = ['Producto', 'U. Vendidas', 'Ventas', 'U. Compradas', 'Compras', 'Utilidad'];
+    const filas = data.reporte.map(item => [
+      item.producto_nombre || 'N/A',
+      item.unidades_vendidas_mes || 0,
+      `$${formatearNumero(item.total_ventas_mes || 0)}`,
+      item.unidades_compradas_mes || 0,
+      `$${formatearNumero(item.total_compras_mes || 0)}`,
+      `$${formatearNumero(item.utilidad_mes || 0)}`
+    ]);
+    
+    doc.autoTable({
+      head: [columnas],
+      body: filas,
+      startY: yInicial + 60,
+      theme: 'grid',
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [52, 152, 219] }
+    });
+  }
+  
+  // Tabla de días con actividad (nueva página si es necesario)
+  if (data.diasActividad && data.diasActividad.length > 0) {
+    doc.addPage();
+    const yNuevaPagina = await crearEncabezadoPDF(doc, 'Actividad Diaria del Mes', fechaFormateada);
+    
+    const columnasDias = ['Fecha', 'Productos Diferentes', 'Ventas', 'Compras', 'Utilidad'];
+    const filasDias = data.diasActividad.map(dia => [
+      formatearFecha(dia.fecha, true),
+      dia.productos_diferentes || 0,
+      `$${formatearNumero(dia.ventas_dia || 0)}`,
+      `$${formatearNumero(dia.compras_dia || 0)}`,
+      `$${formatearNumero(dia.utilidad_dia || 0)}`
+    ]);
+    
+    doc.autoTable({
+      head: [columnasDias],
+      body: filasDias,
+      startY: yNuevaPagina + 20,
+      theme: 'grid',
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [52, 152, 219] }
+    });
+  }
+  
+  const filename = `reporte_mensual_${data.año}_${data.mes}.pdf`;
+  doc.save(filename);
+  mostrarNotificacion('PDF generado exitosamente', 'success');
+}
+
+async function generarPDFHistorial(data) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  const yInicial = await crearEncabezadoPDF(doc, 'Historial de Producto', `Producto ID: ${data.productoId}`);
+  
+  // Tabla de historial
+  if (data.reporte && data.reporte.length > 0) {
+    const columnas = ['Fecha', 'Tipo', 'Cantidad', 'Precio Unit.', 'Subtotal'];
+    const filas = data.reporte.map(mov => [
+      formatearFecha(mov.fecha, true),
+      mov.tipo || 'N/A',  // Corregido: era tipo_movimiento
+      mov.cantidad || 0,
+      `$${formatearNumero(mov.precio_unitario || 0)}`,
+      `$${formatearNumero(mov.subtotal || 0)}`
+    ]);
+    
+    doc.autoTable({
+      head: [columnas],
+      body: filas,
+      startY: yInicial + 20,
+      theme: 'grid',
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [52, 152, 219] }
+    });
+  }
+  
+  const filename = `historial_producto_${data.productoId}.pdf`;
+  doc.save(filename);
+  mostrarNotificacion('PDF generado exitosamente', 'success');
 }
 
 // ================================================
