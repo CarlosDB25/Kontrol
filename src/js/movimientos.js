@@ -1088,7 +1088,3 @@ function limpiarFiltros() {
 function exportarMovimientos() {
   movimientosController.exportarMovimientos();
 }
-
-function volverAlMenu() {
-  movimientosController.volverAlMenu();
-}

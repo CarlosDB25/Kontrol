@@ -162,7 +162,7 @@ async function cargarReporteDiario() {
     mostrarTablaDiaria(reporte, fecha);
     
     currentReportData = { tipo: 'diario', fecha, datos: reporte, resumen };
-    mostrarNotificacion(`Reporte diario generado para ${formatearFecha(fecha)}`, 'success');
+    mostrarNotificacion(`Reporte diario generado para ${formatearFecha(fecha, true)}`, 'success');
     
   } catch (error) {
     console.error('❌ Error cargando reporte diario:', error);
@@ -313,7 +313,7 @@ function mostrarIndicadoresHistorial(indicadores) {
 function mostrarTablaDiaria(datos, fecha) {
   document.getElementById('tableTitle').innerHTML = `
     <span class="table-icon">📅</span>
-    Reporte Diario - ${formatearFecha(fecha)}
+    Reporte Diario - ${formatearFecha(fecha, true)}
   `;
   
   document.getElementById('reportTableHead').innerHTML = `
@@ -402,7 +402,7 @@ function mostrarTablaDiasActividad(datos) {
   
   document.getElementById('activityTableBody').innerHTML = datos.map(dia => `
     <tr class="report-table-row">
-      <td><strong>${formatearFecha(dia.fecha)}</strong></td>
+      <td><strong>${formatearFecha(dia.fecha, true)}</strong></td>
       <td class="text-center">${dia.productos_diferentes || 0}</td>
       <td class="text-right cell-currency">${formatearNumero(dia.ventas_dia || 0)}</td>
       <td class="text-right cell-currency">${formatearNumero(dia.compras_dia || 0)}</td>
@@ -440,7 +440,7 @@ function mostrarTablaHistorial(datos, productoId) {
   
   document.getElementById('reportTableBody').innerHTML = datos.map(mov => `
     <tr class="report-table-row">
-      <td><strong>${formatearFecha(mov.fecha)}</strong></td>
+      <td><strong>${formatearFecha(mov.fecha, true)}</strong></td>
       <td>
         <span class="badge ${mov.tipo === 'entrada' ? 'badge-success' : 'badge-warning'}">
           ${mov.tipo === 'entrada' ? '⬆️ Entrada' : '⬇️ Salida'}
@@ -509,28 +509,6 @@ function mostrarEstadoInicial() {
 function limpiarResultados() {
   mostrarEstadoInicial();
   currentReportData = null;
-}
-
-function formatearFecha(fecha) {
-  if (!fecha) return '-';
-  try {
-    return new Date(fecha + 'T00:00:00').toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  } catch {
-    return fecha;
-  }
-}
-
-function formatearNumero(numero) {
-  if (typeof numero !== 'number') return '0.00';
-  return numero.toLocaleString('es-ES', { 
-    minimumFractionDigits: 2, 
-    maximumFractionDigits: 2 
-  });
 }
 
 // ================================================
@@ -608,14 +586,6 @@ function generarCSVHistorial(data) {
 // NAVEGACIÓN
 // ================================================
 
-function volverAlMenu() {
-  if (window.electronAPI) {
-    window.electronAPI.loadPage('menu');
-  } else {
-    window.location.href = 'menu.html';
-  }
-}
-
 function mostrarNotificacionLocal(mensaje, tipo = 'info') {
   if (typeof NotificationManager !== 'undefined') {
     NotificationManager.show(mensaje, tipo);
@@ -631,5 +601,4 @@ window.cargarReporteDiario = cargarReporteDiario;
 window.cargarReporteMensual = cargarReporteMensual;
 window.cargarHistorialProducto = cargarHistorialProducto;
 window.exportarReporte = exportarReporte;
-window.volverAlMenu = volverAlMenu;
 window.inicializarReportes = inicializarReportes;

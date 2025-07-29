@@ -30,6 +30,8 @@ module.exports = {
   obtenerMovimientos: movimientos.obtenerMovimientos,
   obtenerDetalleSalida: movimientos.obtenerDetalleSalida,
   eliminarSalida: movimientos.eliminarSalida,
+  actualizarDetalleMovimiento: movimientos.actualizarDetalleMovimiento,
+  actualizarTotalMovimiento: movimientos.actualizarTotalMovimiento,
   
   // Funciones de reportes
   obtenerReporteDiario: reportes.obtenerReporteDiario,

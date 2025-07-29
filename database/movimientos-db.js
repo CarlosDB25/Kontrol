@@ -223,9 +223,76 @@ const eliminarSalida = (id) => {
   });
 };
 
+// ================================================
+// ACTUALIZAR DETALLE DE MOVIMIENTO
+// ================================================
+
+const actualizarDetalleMovimiento = (detalleId, nuevaCantidad, nuevoPrecio) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      `UPDATE movimientos_detalle 
+       SET cantidad = ?, precio_unitario = ? 
+       WHERE id = ?`,
+      [nuevaCantidad, nuevoPrecio, detalleId],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        
+        if (this.changes === 0) {
+          reject(new Error(`No se encontró el detalle de movimiento con ID ${detalleId}`));
+          return;
+        }
+        
+        resolve({ 
+          success: true, 
+          changes: this.changes,
+          detalleId: detalleId 
+        });
+      }
+    );
+  });
+};
+
+// ================================================
+// ACTUALIZAR TOTAL DE MOVIMIENTO
+// ================================================
+
+const actualizarTotalMovimiento = (movimientoId, nuevoTotal) => {
+  return new Promise((resolve, reject) => {
+    db.run(
+      `UPDATE movimientos 
+       SET total_movimiento = ? 
+       WHERE id = ?`,
+      [nuevoTotal, movimientoId],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        
+        if (this.changes === 0) {
+          reject(new Error(`No se encontró el movimiento con ID ${movimientoId}`));
+          return;
+        }
+        
+        resolve({ 
+          success: true, 
+          changes: this.changes,
+          movimientoId: movimientoId,
+          nuevoTotal: nuevoTotal 
+        });
+      }
+    );
+  });
+};
+
 module.exports = {
   registrarMovimiento,
   obtenerMovimientos,
   obtenerDetalleSalida,
-  eliminarSalida
+  eliminarSalida,
+  actualizarDetalleMovimiento,
+  actualizarTotalMovimiento
 };

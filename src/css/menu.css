@@ -31,21 +31,41 @@
 .menu-page .app-header {
   margin-top: 0;
   margin-bottom: 0;
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-sm) 0; /* Menos padding para más espacio */
   text-align: center;
   border-bottom: 1px solid var(--border-light);
   flex-shrink: 0;
+  height: 180px; /* Altura aumentada para logo más grande */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-page .header-logo {
   margin-bottom: 0;
+  height: calc(100% - 2 * var(--spacing-sm)); /* Más altura para el logo */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.menu-page .header-logo:hover {
+  transform: scale(1.02); /* Escala muy sutil */
 }
 
 .menu-page .header-logo img {
-  height: 120px;
-  width: auto;
+  height: 100%; /* Altura máxima del contenedor */
+  width: auto; /* Ancho automático para mantener proporciones */
   object-fit: contain;
   max-width: 100%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: filter 0.25s ease;
+}
+
+.menu-page .header-logo:hover img {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 /* Grid de opciones del menú - más estético y centrado */
@@ -207,6 +227,14 @@
     padding: var(--spacing-md);
   }
   
+  .menu-page .app-header {
+    height: 140px; /* Altura aumentada también en móviles */
+  }
+  
+  .menu-page .header-logo {
+    height: calc(100% - 2 * var(--spacing-sm)); /* Mantener cálculo consistente */
+  }
+  
   .menu-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
@@ -217,7 +245,7 @@
   }
   
   .menu-page .header-logo img {
-    height: 80px;
+    height: 100%; /* Mantener altura completa incluso en móviles */
   }
   
   .menu-card {
