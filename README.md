@@ -4,7 +4,7 @@
 
 **Kontrol** es una aplicación de escritorio desarrollada con **Electron** para la gestión completa de inventarios, movimientos de productos y generación de reportes empresariales. Diseñada para pequeñas y medianas empresas que necesitan un control eficiente de su stock.
 
-> **Versión:** 2.0.0  
+> **Versión:** 1.0.0  
 > **Fecha de actualización:** Julio 2025  
 > **Estado:** Producción ✅
 
@@ -525,7 +525,7 @@ SOFTWARE.
 
 ## 👨‍💻 Autor
 
-**Carlos DB** - [@CarlosDB25](https://github.com/CarlosDB25)
+**K: Carlos Diaz** - [@CarlosDB25](https://github.com/CarlosDB25)
 
 - **GitHub**: [https://github.com/CarlosDB25](https://github.com/CarlosDB25)
 - **Email**: carlosdiazmaerio@gmail.com

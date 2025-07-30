@@ -6,28 +6,10 @@
   <link rel="icon" type="image/png" href="../../assets/img/K_logo-black.png">
   <link rel="stylesheet" href="../css/estilos.css" />
   <link rel="stylesheet" href="../css/brand.css" />
-  <link rel="stylesheet" href="../css/splash.css" />
   <script defer src="../js/shared/notifications.js"></script>
   <script defer src="../js/menu.js"></script>
 </head>
 <body class="menu-page">
-  <!-- Splash Screen integrado directamente -->
-  <div class="splash-screen" id="splashScreen">
-    <img src="../../assets/img/icono.png" alt="Kontrol Logo" class="splash-logo">
-    <div class="splash-title">Kontrol</div>
-    <div class="splash-subtitle">
-      Sistema de Gestión Profesional
-    </div>
-    <div class="splash-loading">
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
-      <div class="splash-dot"></div>
-    </div>
-    <div class="splash-footer">
-      Desarrollado por K - 2025
-    </div>
-  </div>
-
   <div class="container">
     <header class="app-header">
       <div class="header-logo">
@@ -91,28 +73,6 @@
   <div id="notificationArea"></div>
   
   <script>
-    // Control del splash screen
-    function hideSplash() {
-      const splash = document.getElementById('splashScreen');
-      if (splash) {
-        splash.style.opacity = '0';
-        setTimeout(() => {
-          splash.style.display = 'none';
-        }, 500);
-      }
-    }
-    
-    // Ocultar splash después de cargar
-    window.addEventListener('load', function() {
-      setTimeout(hideSplash, 1000);
-    });
-    
-    // También ocultar al hacer click
-    document.addEventListener('click', hideSplash);
-    
-    // Backup por si no funciona lo anterior
-    setTimeout(hideSplash, 2000);
-      
     // Cargar componente de marca
     fetch('brand.html')
       .then(response => response.text())

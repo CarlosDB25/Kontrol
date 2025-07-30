@@ -6,7 +6,9 @@
   "main": "main/main.js",
   "homepage": "https://github.com/CarlosDB25/Kontrol",
   "scripts": {
-    "start": "electron .",
+    "start": "electron . --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox --disable-software-rasterizer --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --max-old-space-size=512",
+    "start:fast": "electron . --no-sandbox --disable-web-security --disable-features=VizDisplayCompositor --disable-gpu --disable-software-rasterizer --max-old-space-size=256",
+    "start:minimal": "electron . --no-sandbox --disable-gpu --disable-dev-shm-usage --disable-extensions --disable-plugins --disable-images --max-old-space-size=256",
     "build": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder",
     "build:win": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win",
     "build:portable": "set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win portable",
@@ -24,6 +26,11 @@
       "assets/**/*",
       "database/**/*",
       "ipc/**/*",
+      "!src/css/brand.css",
+      "!**/*.md",
+      "!**/*.map",
+      "!**/test/**",
+      "!**/tests/**",
       "node_modules/**/*"
     ],
     "extraResources": [
