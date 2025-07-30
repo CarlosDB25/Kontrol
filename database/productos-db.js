@@ -86,7 +86,17 @@ const actualizarStock = (id, nuevoStock) => {
 
 const obtenerResumenRapido = () => {
   return new Promise((resolve, reject) => {
-    const fechaHoy = new Date().toISOString().split('T')[0];
+    // Obtener fecha actual de Colombia (UTC-5)
+    const ahora = new Date();
+    const offsetColombia = -5 * 60; // -5 horas en minutos
+    const fechaColombiana = new Date(ahora.getTime() + (offsetColombia + ahora.getTimezoneOffset()) * 60000);
+    
+    const year = fechaColombiana.getFullYear();
+    const month = String(fechaColombiana.getMonth() + 1).padStart(2, '0');
+    const day = String(fechaColombiana.getDate()).padStart(2, '0');
+    const fechaHoy = `${year}-${month}-${day}`;
+    
+    console.log('🏠 Consultando resumen rápido para fecha Colombia:', fechaHoy);
     
     // Consulta para obtener todos los datos del resumen
     db.all(`

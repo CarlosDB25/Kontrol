@@ -42,19 +42,40 @@ function configurarEventListeners() {
   });
 }
 
+// Función auxiliar para obtener fecha actual de Colombia
+function obtenerFechaColombia() {
+  const ahora = new Date();
+  // Ajustar para Colombia (UTC-5)
+  const offsetColombia = -5 * 60; // -5 horas en minutos
+  const fechaColombiana = new Date(ahora.getTime() + (offsetColombia + ahora.getTimezoneOffset()) * 60000);
+  
+  const year = fechaColombiana.getFullYear();
+  const month = String(fechaColombiana.getMonth() + 1).padStart(2, '0');
+  const day = String(fechaColombiana.getDate()).padStart(2, '0');
+  
+  return `${year}-${month}-${day}`;
+}
+
 function configurarFechaActual() {
-  const today = new Date().toISOString().split('T')[0];
+  const today = obtenerFechaColombia();
   document.getElementById('dailyDate').value = today;
   
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
+  const fechaColombiana = new Date();
+  const offsetColombia = -5 * 60;
+  const fechaAjustada = new Date(fechaColombiana.getTime() + (offsetColombia + fechaColombiana.getTimezoneOffset()) * 60000);
+  
+  const currentMonth = fechaAjustada.getMonth() + 1;
+  const currentYear = fechaAjustada.getFullYear();
   document.getElementById('monthlyMonth').value = currentMonth;
   document.getElementById('monthlyYear').value = currentYear;
 }
 
 function configurarSelectoresAnuales() {
   const yearSelect = document.getElementById('monthlyYear');
-  const currentYear = new Date().getFullYear();
+  const ahora = new Date();
+  const offsetColombia = -5 * 60;
+  const fechaAjustada = new Date(ahora.getTime() + (offsetColombia + ahora.getTimezoneOffset()) * 60000);
+  const currentYear = fechaAjustada.getFullYear();
   
   yearSelect.innerHTML = '';
   for (let year = 2020; year <= currentYear + 2; year++) {
@@ -125,7 +146,7 @@ async function cargarReporteDiario() {
   try {
     let fecha = document.getElementById('dailyDate').value;
     if (!fecha) {
-      fecha = new Date().toISOString().split('T')[0];
+      fecha = obtenerFechaColombia();
       document.getElementById('dailyDate').value = fecha;
     }
     

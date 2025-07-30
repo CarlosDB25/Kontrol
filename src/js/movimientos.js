@@ -13,6 +13,8 @@
  * ✅ Producto fijo "Gasto Externo" solo para salidas
  * ✅ Total de movimiento en tabla
  * ✅ Botón de edición de movimientos
+ * ✅ Permitir mismo producto múltiples veces con precios diferentes
+ * ✅ Fechas y horas locales correctas (no UTC)
  */
 
 // ==========================================
@@ -30,16 +32,30 @@ const CONFIG = {
 // FUNCIONES AUXILIARES
 // ==========================================
 
+// Función auxiliar para formatear fecha en hora de Colombia
+function formatearFechaColombia(fecha) {
+  const fechaObj = new Date(fecha);
+  // Ajustar para Colombia (UTC-5)
+  const offsetColombia = -5 * 60; // -5 horas en minutos
+  const fechaColombiana = new Date(fechaObj.getTime() + (offsetColombia + fechaObj.getTimezoneOffset()) * 60000);
+  
+  return fechaColombiana.toLocaleString('es-CO', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+}
+
 function formatearID(id) {
   if (id < 100) {
     return id.toString().padStart(3, '0');
   }
   return id.toString();
 }
-
-// ==========================================
-// REFERENCIAS DOM
-// ==========================================
 
 class DOMManager {
   constructor() {
@@ -109,12 +125,11 @@ class AppState {
   
   // Métodos para manipular productos en salida
   agregarProductoSalida(producto) {
-    const existe = this.productosSalidaGrupal.find(p => p.producto_id === producto.producto_id);
-    if (!existe) {
-      this.productosSalidaGrupal.push(producto);
-      return true;
-    }
-    return false;
+    // Permitir agregar el mismo producto múltiples veces con diferentes precios
+    // Generar un ID único para cada entrada
+    producto.id_unico = Date.now() + Math.random();
+    this.productosSalidaGrupal.push(producto);
+    return true;
   }
   
   eliminarProductoSalida(index) {
@@ -467,27 +482,30 @@ class MovimientosController {
     const stockDisponible = productoId === CONFIG.GASTO_EXTERNO_ID ? 1 : parseInt(selectedOption.dataset.stock);
     const nombreProducto = selectedOption.dataset.nombre || 'Gasto Externo';
     
-    // Verificar si el producto ya está en la lista
-    if (this.state.productosSalidaGrupal.find(p => p.producto_id === productoId)) {
-      NotificationManager.warning('Este producto ya está en la lista');
-      return;
-    }
+    // Calcular stock ya comprometido en otras entradas del mismo producto
+    const cantidadYaComprometida = this.state.productosSalidaGrupal
+      .filter(p => p.producto_id === productoId)
+      .reduce((total, p) => total + p.cantidad, 0);
     
     // Para salidas, verificar stock suficiente (excepto Gasto Externo)
     const tipoMovimiento = document.querySelector('input[name="tipoMovimiento"]:checked');
-    if (tipoMovimiento && tipoMovimiento.value === 'salida' && productoId !== CONFIG.GASTO_EXTERNO_ID && cantidad > stockDisponible) {
-      NotificationManager.error(`Stock insuficiente. Disponible: ${stockDisponible}`);
-      return;
+    if (tipoMovimiento && tipoMovimiento.value === 'salida' && productoId !== CONFIG.GASTO_EXTERNO_ID) {
+      const stockDisponibleReal = stockDisponible - cantidadYaComprometida;
+      if (cantidad > stockDisponibleReal) {
+        NotificationManager.error(`Stock insuficiente. Disponible: ${stockDisponibleReal} (Ya comprometido: ${cantidadYaComprometida})`);
+        return;
+      }
     }
     
-    // Calcular stock resultante
+    // Calcular stock resultante considerando todas las entradas del mismo producto
     let stockResultante;
     if (productoId === CONFIG.GASTO_EXTERNO_ID) {
       stockResultante = 1; // Gasto Externo siempre mantiene stock 1
     } else {
+      const totalCantidadProducto = cantidadYaComprometida + cantidad;
       stockResultante = tipoMovimiento && tipoMovimiento.value === 'entrada' 
-        ? stockDisponible + cantidad 
-        : stockDisponible - cantidad;
+        ? stockDisponible + totalCantidadProducto
+        : stockDisponible - totalCantidadProducto;
     }
     
     const nuevoProducto = {
@@ -510,7 +528,7 @@ class MovimientosController {
       this.dom.precioUnitario.value = '';
       this.dom.stockInfo.style.display = 'none';
       
-      NotificationManager.success(`${nombreProducto} agregado al movimiento`);
+      NotificationManager.success(`${nombreProducto} agregado al movimiento (Precio: $${precio})`);
     }
   }
 
@@ -699,7 +717,7 @@ class MovimientosController {
     fila.className = 'slide-in-right';
     fila.style.animationDelay = `${index * CONFIG.ANIMATION_DELAY}ms`;
     
-    const fecha = new Date(mov.fecha);
+    const fecha = new Date(mov.fecha_completa || mov.fecha);
     const tipoIcon = mov.tipo === 'entrada' ? '📥' : '📤';
     const tipoClass = mov.tipo === 'entrada' ? 'entrada' : 'salida';
     
@@ -709,7 +727,7 @@ class MovimientosController {
     
     fila.innerHTML = `
       <td class="col-id">#${formatearID(mov.id)}</td>
-      <td>${fecha.toLocaleString('es-ES')}</td>
+      <td>${formatearFechaColombia(mov.fecha_completa || mov.fecha)}</td>
       <td>
         <span class="movement-badge ${tipoClass}">
           ${tipoIcon} ${mov.tipo.charAt(0).toUpperCase() + mov.tipo.slice(1)}
@@ -772,7 +790,7 @@ class MovimientosController {
     if (this.dom.fechaDesde.value) {
       const fechaDesde = new Date(this.dom.fechaDesde.value);
       movimientosFiltrados = movimientosFiltrados.filter(mov => 
-        new Date(mov.fecha) >= fechaDesde
+        new Date(mov.fecha_completa || mov.fecha) >= fechaDesde
       );
     }
     
@@ -780,7 +798,7 @@ class MovimientosController {
     if (this.dom.fechaHasta.value) {
       const fechaHasta = new Date(this.dom.fechaHasta.value + 'T23:59:59');
       movimientosFiltrados = movimientosFiltrados.filter(mov => 
-        new Date(mov.fecha) <= fechaHasta
+        new Date(mov.fecha_completa || mov.fecha) <= fechaHasta
       );
     }
     
@@ -810,7 +828,7 @@ class MovimientosController {
   }
 
   mostrarModalDetalle(movimiento, detalle) {
-    const fecha = new Date(movimiento.fecha);
+    const fecha = new Date(movimiento.fecha_completa || movimiento.fecha);
     const tipoIcon = movimiento.tipo === 'entrada' ? '📥' : '📤';
     
     let productosHtml = '';
@@ -827,7 +845,7 @@ class MovimientosController {
             <span>Subtotal: $${(item.subtotal || (item.cantidad * item.precio_unitario)).toLocaleString()}</span>
           </div>
           ${item.producto_id !== CONFIG.GASTO_EXTERNO_ID ? 
-            `<div class="stock-cambio">Stock: ${item.stock_anterior} → ${item.stock_actual}</div>` : 
+            `<div class="stock-cambio">Stock: ${item.stock_anterior || 0} → ${item.stock_nuevo || 0}</div>` : 
             ''
           }
         </div>
@@ -837,7 +855,7 @@ class MovimientosController {
     document.getElementById('detalleContent').innerHTML = `
       <div class="detalle-header">
         <h4>${tipoIcon} ${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)} #${formatearID(movimiento.id)}</h4>
-        <small>${fecha.toLocaleString('es-ES')}</small>
+        <small>${formatearFechaColombia(movimiento.fecha_completa || movimiento.fecha)}</small>
       </div>
       
       <div class="detalle-info">
@@ -872,7 +890,7 @@ class MovimientosController {
   }
 
   mostrarModalEdicion(movimiento, detalle) {
-    const fecha = new Date(movimiento.fecha);
+    const fecha = new Date(movimiento.fecha_completa || movimiento.fecha);
     const tipoIcon = movimiento.tipo === 'entrada' ? '📥' : '📤';
     
     let productosHtml = '';
@@ -914,7 +932,7 @@ class MovimientosController {
     document.getElementById('edicionContent').innerHTML = `
       <div class="edicion-header">
         <h4>${tipoIcon} ${movimiento.tipo.charAt(0).toUpperCase() + movimiento.tipo.slice(1)} #${formatearID(movimiento.id)}</h4>
-        <small>${fecha.toLocaleString('es-ES')}</small>
+        <small>${formatearFechaColombia(movimiento.fecha_completa || movimiento.fecha)}</small>
       </div>
       
       <div class="edicion-info">

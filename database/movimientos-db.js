@@ -12,11 +12,27 @@ const registrarMovimiento = (tipo, descripcion, productos) => {
       // Calcular total del movimiento
       const totalMovimiento = productos.reduce((sum, p) => sum + (p.cantidad * p.precio_unitario), 0);
       
+      // Obtener fecha y hora actual de Colombia (UTC-5)
+      const ahora = new Date();
+      // Ajustar manualmente para Colombia (UTC-5)
+      const offsetColombia = -5 * 60; // -5 horas en minutos
+      const fechaColombiana = new Date(ahora.getTime() + (offsetColombia + ahora.getTimezoneOffset()) * 60000);
+      
+      const year = fechaColombiana.getFullYear();
+      const month = String(fechaColombiana.getMonth() + 1).padStart(2, '0');
+      const day = String(fechaColombiana.getDate()).padStart(2, '0');
+      const hours = String(fechaColombiana.getHours()).padStart(2, '0');
+      const minutes = String(fechaColombiana.getMinutes()).padStart(2, '0');
+      const seconds = String(fechaColombiana.getSeconds()).padStart(2, '0');
+      
+      const fechaLocal = `${year}-${month}-${day}`;
+      const fechaCompleta = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      
       // 1. Crear el movimiento principal
       db.run(
-        `INSERT INTO movimientos (tipo, descripcion, total_productos, total_movimiento) 
-         VALUES (?, ?, ?, ?)`,
-        [tipo, descripcion, productos.length, totalMovimiento],
+        `INSERT INTO movimientos (tipo, descripcion, total_productos, total_movimiento, fecha, fecha_completa) 
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [tipo, descripcion, productos.length, totalMovimiento, fechaLocal, fechaCompleta],
         function (err) {
           if (err) {
             db.run('ROLLBACK');
