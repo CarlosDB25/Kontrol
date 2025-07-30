@@ -194,10 +194,49 @@ npm start
 {
   "start": "electron .",
   "build": "electron-builder",
-  "pack": "electron-builder --dir",
-  "clean": "rm -rf dist/ build/"
+  "build:win": "electron-builder --win",
+  "build:portable": "electron-builder --win portable",
+  "dist": "electron-builder --publish=never"
 }
 ```
+
+## 📦 Construcción de Ejecutable
+
+### **Generar aplicación empaquetada**
+
+Para crear un archivo ejecutable (.exe) de la aplicación para distribución:
+
+#### **🚀 Construcción rápida (solo portable)**
+```bash
+npm run build:portable
+```
+
+#### **🏗️ Construcción completa**
+```bash
+npm run build
+```
+
+#### **📁 Resultado**
+Los archivos generados se encuentran en la carpeta `dist/`:
+- `Kontrol-1.0.0-portable.exe` - Ejecutable portable (no requiere instalación)
+- `win-unpacked/` - Aplicación desempaquetada para desarrollo
+
+### **✨ Características del ejecutable**
+- ✅ **Sin instalación requerida** - Ejecutable portable
+- ✅ **Icono personalizado** - Logo de Kontrol en múltiples resoluciones
+- ✅ **Base de datos incluida** - SQLite empaquetado automáticamente
+- ✅ **Datos persistentes** - Se guardan en `%APPDATA%\Kontrol\`
+- ✅ **Tamaño optimizado** - ~85MB con todas las dependencias
+
+### **🔧 Requisitos del sistema**
+- **Windows 10** o superior (x64)
+- **4GB RAM** mínimo recomendado
+- **50MB espacio** en disco
+
+### **📋 Notas importantes**
+- La primera ejecución puede tomar unos segundos mientras se configura la base de datos
+- Los datos se almacenan en la carpeta del usuario para persistencia entre actualizaciones
+- No requiere permisos de administrador para ejecutar
 
 ## 📖 Guía de Uso
 
