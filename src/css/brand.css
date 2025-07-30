@@ -1,0 +1,346 @@
+/*
+ * ==========================================
+ * KONTROL - MARCA PERSONAL MINIMALISTA
+ * ==========================================
+ * Versión discreta solo para menú principal
+ * Colores: Negro principal, Rojo acento, Escala de grises
+ */
+
+:root {
+  --brand-black: #000000;
+  --brand-red: #dc2626;
+  --brand-gray-dark: #1f1f1f;
+  --brand-gray-medium: #666666;
+  --brand-gray-light: #cccccc;
+  --brand-white: #ffffff;
+}
+
+/* ==========================================
+ * MARCA MINIMALISTA - SOLO MENÚ
+ * ========================================== */
+
+.brand-minimal {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  z-index: 100;
+}
+
+/* Contenedor del botón Acerca de en esquina opuesta */
+.brand-about-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+/* Toggle modal con CSS puro */
+.brand-modal-toggle {
+  display: none;
+}
+
+/* Mostrar modal cuando checkbox está marcado */
+#brandModalToggle:checked ~ .brand-modal {
+  display: flex !important;
+  animation: fadeIn 0.3s ease;
+}
+
+.brand-logo-link {
+  display: block;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.brand-logo-link:hover {
+  transform: scale(1.1);
+}
+
+.brand-k-logo {
+  width: auto;
+  height: auto;
+  background: transparent;
+  color: var(--brand-black);
+  font-size: 32px;
+  font-weight: 900;
+  font-family: 'Arial Black', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.4s ease;
+  text-shadow: 
+    0 0 10px var(--brand-red),
+    0 0 20px var(--brand-red),
+    0 0 30px var(--brand-red),
+    2px 2px 0px rgba(0,0,0,0.8),
+    -1px -1px 0px rgba(255,255,255,0.3);
+  filter: 
+    drop-shadow(0 0 15px rgba(220, 38, 38, 0.6))
+    drop-shadow(0 0 30px rgba(220, 38, 38, 0.4));
+  animation: antimagicPulse 2s ease-in-out infinite alternate;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  gap: 4px;
+}
+
+.brand-symbol {
+  font-size: 16px;
+  color: var(--brand-black);
+  text-shadow: 
+    0 0 8px var(--brand-red),
+    0 0 16px var(--brand-red);
+  animation: symbolGlow 1.5s ease-in-out infinite alternate;
+  position: absolute;
+  top: -4px;
+  right: -2px;
+}
+
+@keyframes antimagicPulse {
+  0% {
+    filter: 
+      drop-shadow(0 0 10px rgba(220, 38, 38, 0.4))
+      drop-shadow(0 0 20px rgba(220, 38, 38, 0.2));
+    text-shadow: 
+      0 0 8px var(--brand-red),
+      0 0 16px var(--brand-red),
+      2px 2px 0px rgba(0,0,0,0.6),
+      -1px -1px 0px rgba(255,255,255,0.2);
+  }
+  100% {
+    filter: 
+      drop-shadow(0 0 20px rgba(220, 38, 38, 0.8))
+      drop-shadow(0 0 40px rgba(220, 38, 38, 0.6));
+    text-shadow: 
+      0 0 15px var(--brand-red),
+      0 0 30px var(--brand-red),
+      0 0 45px var(--brand-red),
+      2px 2px 0px rgba(0,0,0,0.8),
+      -1px -1px 0px rgba(255,255,255,0.3);
+  }
+}
+
+@keyframes symbolGlow {
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    text-shadow: 0 0 5px var(--brand-red);
+  }
+  100% {
+    transform: scale(1.2) rotate(15deg);
+    text-shadow: 
+      0 0 10px var(--brand-red),
+      0 0 20px var(--brand-red);
+  }
+}
+
+.brand-k-logo:hover {
+  transform: scale(1.15);
+  color: var(--brand-black);
+  text-shadow: 
+    0 0 20px var(--brand-red),
+    0 0 40px var(--brand-red),
+    0 0 60px var(--brand-red),
+    3px 3px 0px rgba(0,0,0,0.9),
+    -1px -1px 0px rgba(255,255,255,0.4);
+  filter: 
+    drop-shadow(0 0 25px rgba(220, 38, 38, 0.9))
+    drop-shadow(0 0 50px rgba(220, 38, 38, 0.7));
+}
+
+.brand-k-logo:hover .brand-symbol {
+  transform: scale(1.5) rotate(45deg);
+  color: var(--brand-red);
+}
+
+.brand-about-link {
+  background: none;
+  border: none;
+  color: var(--brand-gray-medium);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.brand-about-link:hover {
+  color: var(--brand-red);
+  background: rgba(220, 38, 38, 0.05);
+}
+
+/* ==========================================
+ * MODAL ACERCA DE - SIMPLIFICADO
+ * ========================================== */
+
+.brand-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(5px);
+}
+
+.brand-modal.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.brand-modal-content {
+  background: linear-gradient(135deg, var(--brand-gray-dark) 0%, var(--brand-black) 100%);
+  border: 2px solid var(--brand-red);
+  border-radius: 12px;
+  padding: 25px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  color: var(--brand-white);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.brand-modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: var(--brand-gray-light);
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.brand-modal-close:hover {
+  color: var(--brand-red);
+}
+
+.brand-modal-logo {
+  width: auto;
+  height: auto;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+  font-size: 64px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-modal-logo .brand-symbol {
+  font-size: 28px !important;
+  top: -6px;
+  left: 65px;
+  right: auto;
+}
+
+.brand-modal-logo:hover {
+  transform: scale(1.05);
+}
+
+.brand-modal-info {
+  text-align: left;
+  margin: 20px 0;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border-left: 3px solid var(--brand-red);
+}
+
+.brand-modal-info h4 {
+  margin: 0 0 10px;
+  color: var(--brand-red);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.brand-modal-info p {
+  margin: 5px 0;
+  color: var(--brand-gray-light);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.brand-modal-info strong {
+  color: var(--brand-white);
+}
+
+.brand-k {
+  color: var(--brand-red);
+  font-weight: 700;
+}
+
+.brand-github-link {
+  display: inline-block;
+  background: var(--brand-red);
+  color: var(--brand-white);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
+
+.brand-github-link:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+/* ==========================================
+ * ANIMACIONES
+ * ========================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==========================================
+ * RESPONSIVE
+ * ========================================== */
+
+@media (max-width: 768px) {
+  .brand-minimal {
+    bottom: 15px;
+    left: 15px;
+  }
+  
+  .brand-about-container {
+    bottom: 15px;
+    right: 15px;
+  }
+  
+  .brand-k-logo {
+    font-size: 28px;
+    padding: 6px 10px;
+  }
+  
+  .brand-symbol {
+    font-size: 14px;
+    top: -3px;
+    right: -1px;
+  }
+  
+  .brand-modal-content {
+    padding: 20px;
+    margin: 20px;
+  }
+}

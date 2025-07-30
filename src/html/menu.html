@@ -3,12 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <title>Kontrol - Menú Principal</title>
-  <link rel="icon" type="image/png" href="../../assets/img/icono.png">
+  <link rel="icon" type="image/png" href="../../assets/img/K_logo-black.png">
   <link rel="stylesheet" href="../css/estilos.css" />
+  <link rel="stylesheet" href="../css/brand.css" />
+  <link rel="stylesheet" href="../css/splash.css" />
   <script defer src="../js/shared/notifications.js"></script>
   <script defer src="../js/menu.js"></script>
 </head>
 <body class="menu-page">
+  <!-- Splash Screen integrado directamente -->
+  <div class="splash-screen" id="splashScreen">
+    <img src="../../assets/img/icono.png" alt="Kontrol Logo" class="splash-logo">
+    <div class="splash-title">Kontrol</div>
+    <div class="splash-subtitle">
+      Sistema de Gestión Profesional
+    </div>
+    <div class="splash-loading">
+      <div class="splash-dot"></div>
+      <div class="splash-dot"></div>
+      <div class="splash-dot"></div>
+    </div>
+    <div class="splash-footer">
+      Desarrollado por K - 2025
+    </div>
+  </div>
+
   <div class="container">
     <header class="app-header">
       <div class="header-logo">
@@ -63,7 +82,56 @@
         </div>
       </div>
     </div>
-  </div>  <!-- Área de notificaciones -->
+  </div>
+  
+  <!-- Incluir marca personal -->
+  <div id="brandComponent"></div>
+  
+  <!-- Área de notificaciones -->
   <div id="notificationArea"></div>
+  
+  <script>
+    // Control del splash screen
+    function hideSplash() {
+      const splash = document.getElementById('splashScreen');
+      if (splash) {
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 500);
+      }
+    }
+    
+    // Ocultar splash después de cargar
+    window.addEventListener('load', function() {
+      setTimeout(hideSplash, 1000);
+    });
+    
+    // También ocultar al hacer click
+    document.addEventListener('click', hideSplash);
+    
+    // Backup por si no funciona lo anterior
+    setTimeout(hideSplash, 2000);
+      
+    // Cargar componente de marca
+    fetch('brand.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('brandComponent').innerHTML = html;
+        console.log('✅ Componente brand cargado exitosamente');
+        
+        // Verificar que toggleModal esté disponible
+        setTimeout(() => {
+          if (typeof window.toggleModal === 'function') {
+            console.log('✅ toggleModal está disponible');
+          } else {
+            console.error('❌ toggleModal NO está disponible');
+          }
+        }, 200);
+      })
+      .catch(error => {
+        console.error('❌ Error cargando brand component:', error);
+      });
+  </script>
 </body>
 </html>

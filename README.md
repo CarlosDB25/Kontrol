@@ -42,6 +42,8 @@
 - ✅ Estados de carga y feedback visual
 - ✅ Tema consistente con variables CSS
 - ✅ Animaciones y transiciones suaves
+- ✅ **Marca minimalista**: Logo K estilizado con efectos antimagia
+- ✅ **Modal "Acerca de"**: CSS puro sin JavaScript, funcional y elegante
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -88,12 +90,15 @@ Kontrol-Base/
 │   │   ├── movements.css     # Estilos de movimientos
 │   │   ├── reportes.css      # Estilos de reportes
 │   │   ├── notifications.css # Sistema de notificaciones
+│   │   ├── brand.css         # Estilos de marca minimalista
+│   │   ├── splash.css        # Pantalla de carga
 │   │   └── estilos.css       # CSS principal (importa módulos)
 │   ├── 📁 html/              # Páginas HTML
 │   │   ├── menu.html         # Menú principal
 │   │   ├── productos.html    # Gestión de productos
 │   │   ├── movimientos.html  # Gestión de movimientos
-│   │   └── reportes.html     # Módulo de reportes
+│   │   ├── reportes.html     # Módulo de reportes
+│   │   └── brand.html        # Componente de marca (modal "Acerca de")
 │   └── 📁 js/                # Scripts JavaScript
 │       ├── menu.js           # Lógica del menú
 │       ├── productos.js      # Lógica de productos
