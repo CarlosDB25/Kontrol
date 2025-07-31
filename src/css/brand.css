@@ -221,8 +221,26 @@
   transition: color 0.3s ease;
 }
 
-.brand-modal-close:hover {
+.brand-modal-close-large {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--brand-gray-light);
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.brand-modal-close:hover,
+.brand-modal-close-large:hover {
   color: var(--brand-red);
+  background: rgba(220, 38, 38, 0.1);
 }
 
 .brand-modal-logo {
@@ -280,7 +298,6 @@
 }
 
 .brand-github-link {
-  display: inline-block;
   background: var(--brand-red);
   color: var(--brand-white);
   text-decoration: none;
@@ -288,14 +305,69 @@
   border-radius: 6px;
   font-weight: 600;
   font-size: 12px;
-  margin-top: 15px;
+  margin: 5px;
   transition: all 0.3s ease;
+  display: inline-block;
+  min-width: 125px;
+  text-align: center;
+}
+
+.brand-website-link {
+  background: linear-gradient(135deg, #4285f4, #34a853);
+  color: var(--brand-white);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 5px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  min-width: 125px;
+  text-align: center;
+}
+
+.brand-backup-button {
+  background: linear-gradient(135deg, #34a853, #81c995);
+  color: var(--brand-white);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 5px;
+  transition: all 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  font-family: inherit;
+  min-width: 125px;
+  text-align: center;
+}
+
+.brand-modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
 }
 
 .brand-github-link:hover {
   background: #b91c1c;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.brand-website-link:hover {
+  background: linear-gradient(135deg, #3367d6, #2d7f32);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+}
+
+.brand-backup-button:hover {
+  background: linear-gradient(135deg, #2d7f32, #68bb74);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 168, 83, 0.4);
 }
 
 /* ==========================================

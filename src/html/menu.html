@@ -3,14 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>Kontrol - Menú Principal</title>
-  <link rel="icon" type="image/png" href="../../assets/img/K_logo-black.png">
+  <link rel="icon" type="image/png" href="../../assets/logo.ico">
   <link rel="stylesheet" href="../css/estilos.css" />
   <link rel="stylesheet" href="../css/brand.css" />
+  <link rel="stylesheet" href="../css/backup-modal.css" />
   <script defer src="../js/shared/notifications.js"></script>
   <script defer src="../js/menu.js"></script>
 </head>
 <body class="menu-page">
   <div class="container">
+    <!-- Botón de historial de respaldos -->
+    <button class="backup-history-button" onclick="abrirModalRespaldos()" title="Historial de respaldos">
+      ⟲
+    </button>
+    
     <header class="app-header">
       <div class="header-logo">
         <img src="../../assets/img/Kontrol logo.png" alt="Kontrol">
@@ -67,31 +73,131 @@
   </div>
   
   <!-- Incluir marca personal -->
-  <div id="brandComponent"></div>
+  <div id="brandComponent">
+    <div class="brand-minimal">
+      <a href="https://github.com/CarlosDB25" target="_blank" class="brand-logo-link" title="Ver más proyectos en GitHub">
+        <div class="brand-k-logo">
+          K
+          <span class="brand-symbol">♧</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Toggle y Botón Acerca de en esquina opuesta -->
+    <input type="checkbox" id="brandModalToggle" class="brand-modal-toggle">
+    <div class="brand-about-container">
+      <label for="brandModalToggle" class="brand-about-link" title="Información del desarrollador">
+        Acerca de
+      </label>
+    </div>
+
+    <!-- Modal Acerca de -->
+    <div class="brand-modal" id="brandModal">
+      <div class="brand-modal-content">
+        <label for="brandModalToggle" class="brand-modal-close-large">&times;</label>
+        
+        <div class="brand-k-logo brand-modal-logo">
+          K
+          <span class="brand-symbol">♧</span>
+        </div>
+        
+        <div class="brand-modal-info">
+          <h4>🚀 Desarrollador</h4>
+          <p><strong>Carlos</strong> - Ing. de Sistemas</p>
+          <p><strong>GitHub:</strong> @CarlosDB25</p>
+          <p><strong>Proyecto:</strong> Kontrol</p>
+        </div>
+        
+        <div class="brand-modal-info">
+          <h4>⚙️ Información Técnica</h4>
+          <p><strong>Versión:</strong> Kontrol v1.0.0</p>
+          <p><strong>Base de datos:</strong> SQLite (local)</p>
+          <p><strong>Ubicación:</strong> %APPDATA%\Kontrol\kontrol.db</p>
+          <p><strong>Respaldo:</strong> Automático diario + Manual</p>
+          <p><strong>Última actualización:</strong> 31 Jul 2025</p>
+        </div>
+        
+        <div class="brand-modal-buttons">
+          <a href="https://github.com/CarlosDB25" class="brand-github-link" target="_blank">
+            📋 Más proyectos
+          </a>
+          <a href="https://carlosdb25.github.io/Kontrol-Website/" class="brand-website-link" target="_blank">
+            🌐 Sitio Web
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de Gestión de Respaldos -->
+  <div class="backup-modal" id="backupModal">
+    <div class="backup-modal-content">
+      <div class="backup-modal-header">
+        <h3>🕐 Gestión de Respaldos</h3>
+        <button class="backup-modal-close" onclick="cerrarModalRespaldos()">&times;</button>
+      </div>
+      
+      <div class="backup-modal-body">
+        <!-- Información del sistema -->
+        <div class="backup-info-section">
+          <div class="backup-info-item">
+            <span class="backup-info-label">Último respaldo:</span>
+            <span class="backup-info-value" id="lastBackupInfo">Cargando...</span>
+          </div>
+          <div class="backup-info-item">
+            <span class="backup-info-label">Total de respaldos:</span>
+            <span class="backup-info-value" id="totalBackups">-</span>
+          </div>
+          <div class="backup-info-item">
+            <span class="backup-info-label">Ubicación:</span>
+            <span class="backup-info-value">%APPDATA%\Kontrol\backups\...</span>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="backup-actions">
+          <button class="backup-btn backup-btn-primary" onclick="crearRespaldoDesdeModal()">
+            💾 Crear Respaldo Manual
+          </button>
+          <button class="backup-btn backup-btn-secondary" onclick="actualizarListaRespaldos()">
+            🔄 Actualizar Lista
+          </button>
+        </div>
+
+        <!-- Lista de respaldos -->
+        <div class="backup-list-section">
+          <h4>📋 Historial de Respaldos</h4>
+          <div class="backup-list" id="backupList">
+            <div class="backup-loading">Cargando respaldos...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal de confirmación personalizado -->
+  <div class="backup-confirm-modal" id="backupConfirmModal">
+    <div class="backup-confirm-content">
+      <span class="backup-confirm-icon">⚠️</span>
+      <h3 class="backup-confirm-title">¡ADVERTENCIA!</h3>
+      <p class="backup-confirm-message">
+        Estás a punto de restaurar un respaldo anterior. Esta acción reemplazará completamente la base de datos actual.
+      </p>
+      <div class="backup-confirm-warning">
+        ⚠️ Todos los cambios no respaldados se perderán permanentemente. Esta acción no se puede deshacer.
+      </div>
+      <div class="backup-confirm-actions">
+        <button class="backup-confirm-btn backup-confirm-btn-cancel" onclick="cancelarRestauracion()">
+          ❌ Cancelar
+        </button>
+        <button class="backup-confirm-btn backup-confirm-btn-danger" onclick="confirmarRestauracionFinal()">
+          ↻ Sí, Restaurar
+        </button>
+      </div>
+    </div>
+  </div>
   
   <!-- Área de notificaciones -->
   <div id="notificationArea"></div>
-  
-  <script>
-    // Cargar componente de marca
-    fetch('brand.html')
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById('brandComponent').innerHTML = html;
-        console.log('✅ Componente brand cargado exitosamente');
-        
-        // Verificar que toggleModal esté disponible
-        setTimeout(() => {
-          if (typeof window.toggleModal === 'function') {
-            console.log('✅ toggleModal está disponible');
-          } else {
-            console.error('❌ toggleModal NO está disponible');
-          }
-        }, 200);
-      })
-      .catch(error => {
-        console.error('❌ Error cargando brand component:', error);
-      });
-  </script>
 </body>
 </html>

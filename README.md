@@ -2,13 +2,23 @@
 
 ![Kontrol Logo](assets/img/Kontrol%20logo.png)
 
-**Kontrol** es una aplicación de escritorio desarrollada con **Electron** para la gestión completa de inventarios, movimientos de productos y generación de reportes empresariales. Diseñada para pequeñas y medianas empresas que necesitan un control eficiente de su stock.
+**Kontrol** es una aplicación de escritorio desarrollada con **Electron** para la gestión completa de inventarios, movimientos de productos y generación de reportes empresariales. Diseñada para pequeñas y medianas empresas que necesitan un control eficiente de su stock con sistema de respaldos automáticos.
 
 > **Versión:** 1.0.0  
 > **Fecha de actualización:** Julio 2025  
 > **Estado:** Producción ✅
 
 ## 🚀 Características Principales
+
+### 🔒 **Sistema de Respaldos Automáticos** ⭐ NUEVO
+- ✅ **Respaldos automáticos diarios**: Protección automática de datos
+- ✅ **Respaldos manuales**: Crear respaldos en cualquier momento
+- ✅ **Gestión inteligente**: Retención de hasta 30 respaldos
+- ✅ **Restauración completa**: Volver a cualquier punto anterior
+- ✅ **Interfaz de gestión**: Modal profesional para manejo de respaldos
+- ✅ **Respaldos pre-restauración**: Backup automático antes de restaurar
+- ✅ **Limpieza automática**: Eliminación de respaldos antiguos
+- ✅ **Ubicación segura**: Almacenados en AppData del usuario
 
 ### 📦 **Gestión de Productos**
 - ✅ Registro completo de productos con miniaturas
@@ -44,6 +54,8 @@
 - ✅ Animaciones y transiciones suaves
 - ✅ **Marca minimalista**: Logo K estilizado con efectos antimagia
 - ✅ **Modal "Acerca de"**: CSS puro sin JavaScript, funcional y elegante
+- ✅ **Código optimizado**: Limpieza de duplicaciones y logs de debug
+- ✅ **Rendimiento mejorado**: Reducción de overhead en producción
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -70,11 +82,13 @@ Kontrol-Base/
 │   ├── productos-db.js       # Funciones de productos
 │   ├── movimientos-db.js     # Funciones de movimientos
 │   ├── reportes-db.js        # Funciones de reportes
+│   ├── backup.js             # Sistema de respaldos automáticos
 │   └── kontrol.db            # Base de datos SQLite
 ├── 📁 ipc/                   # Comunicación IPC
 │   ├── productosIPC.js       # IPC para productos
 │   ├── movimientosIPC.js     # IPC para movimientos
-│   └── reportesIPC.js        # IPC para reportes
+│   ├── reportesIPC.js        # IPC para reportes
+│   └── backupIPC.js          # IPC para sistema de respaldos
 ├── 📁 main/                  # Proceso principal
 │   ├── main.js               # Punto de entrada de Electron
 │   └── preload.js            # Script de precarga
@@ -91,14 +105,15 @@ Kontrol-Base/
 │   │   ├── reportes.css      # Estilos de reportes
 │   │   ├── notifications.css # Sistema de notificaciones
 │   │   ├── brand.css         # Estilos de marca minimalista
+│   │   ├── backup-modal.css  # Estilos para modal de respaldos
 │   │   ├── splash.css        # Pantalla de carga
 │   │   └── estilos.css       # CSS principal (importa módulos)
 │   ├── 📁 html/              # Páginas HTML
-│   │   ├── menu.html         # Menú principal
+│   │   ├── menu.html         # Menú principal (con marca embebida)
 │   │   ├── productos.html    # Gestión de productos
 │   │   ├── movimientos.html  # Gestión de movimientos
 │   │   ├── reportes.html     # Módulo de reportes
-│   │   └── brand.html        # Componente de marca (modal "Acerca de")
+│   │   └── simple-splash.html # Splash screen optimizado
 │   └── 📁 js/                # Scripts JavaScript
 │       ├── menu.js           # Lógica del menú
 │       ├── productos.js      # Lógica de productos
@@ -495,7 +510,41 @@ Utiliza el sistema de Issues de GitHub con:
 - **Capturas de pantalla** (si aplica)
 - **Información del sistema**
 
-## 📄 Licencia
+## � Registro de Cambios
+
+### 🔥 Julio 31, 2025 - Versión 1.0.0
+
+#### ⭐ **Nuevas Funcionalidades**
+- **Sistema de Respaldos Automáticos Completo**
+  - ✅ Respaldos automáticos diarios configurables
+  - ✅ Respaldos manuales con interfaz dedicada
+  - ✅ Gestión inteligente con retención de 30 respaldos
+  - ✅ Modal profesional de gestión de respaldos
+  - ✅ Restauración completa con respaldo pre-restauración
+  - ✅ Limpieza automática de archivos antiguos
+  - ✅ Ubicación segura en AppData del usuario
+
+#### 🛠️ **Optimizaciones y Mejoras**
+- **Limpieza Masiva de Código**
+  - ✅ Eliminación de 16+ console.log de producción
+  - ✅ Remoción de código CSS duplicado
+  - ✅ Optimización de estilos de botones
+  - ✅ Consolidación de funciones repetidas
+  - ✅ Mejora del rendimiento general
+
+#### 🎨 **Mejoras de Interfaz**
+- ✅ Animaciones CSS optimizadas para modales
+- ✅ Consistencia en el sistema de colores
+- ✅ Botones estandarizados en tamaño
+- ✅ Transiciones más fluidas
+
+#### 🔧 **Correcciones Técnicas**
+- ✅ Manejo mejorado de errores silenciosos
+- ✅ Optimización de carga de módulos
+- ✅ Reducción de overhead en producción
+- ✅ Mejor gestión de memoria
+
+## �📄 Licencia
 
 Este proyecto está bajo la **Licencia MIT**. Consulta el archivo `LICENSE` para más detalles.
 

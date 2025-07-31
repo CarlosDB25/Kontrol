@@ -710,21 +710,6 @@ input[type="radio"]:checked + .salida-grupal-option {
   font-size: 1.1rem;
 }
 
-.btn-remove-product {
-  background: var(--accent-danger);
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: var(--font-size-xs);
-  transition: var(--transition);
-}
-
-.btn-remove-product:hover {
-  background: #c62828;
-}
-
 /* Resumen de salida grupal */
 .salida-grupal-resumen {
   background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-tertiary) 100%);

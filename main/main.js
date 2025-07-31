@@ -6,8 +6,6 @@ let splashWindow;
 
 // ⚡ SPLASH ULTRA-RÁPIDO - Optimizado para hardware limitado
 function createUltraFastSplash() {
-  console.log('⚡ Splash ultra-rápido...');
-  
   splashWindow = new BrowserWindow({
     width: 400,        // Más pequeño para menos procesamiento
     height: 300,       // Más pequeño para menos procesamiento
@@ -29,7 +27,6 @@ function createUltraFastSplash() {
   
   splashWindow.once('ready-to-show', () => {
     splashWindow.show();
-    console.log('✨ Splash visible - Cargando módulos...');
     
     // Delay más corto para hardware limitado
     setTimeout(() => {
@@ -40,28 +37,24 @@ function createUltraFastSplash() {
 
 // 📦 Cargar módulos pesados con delay
 async function loadAppModules() {
-  console.log('📦 Cargando módulos...');
-  
   try {
     const { inicializarBaseDatos } = require('../database/db');
     
     require('../ipc/productosIPC.js');
     require('../ipc/movimientosIPC.js');
     require('../ipc/reportesIPC.js');
+    require('../ipc/backupIPC.js');
     
     await inicializarBaseDatos();
-    console.log('✅ Módulos listos');
     
     createMainWindow();
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('❌ Error al cargar módulos:', error);
     createMainWindow();
   }
 }
 
 function createMainWindow() {
-  console.log('🚀 Creando ventana principal...');
-  
   mainWindow = new BrowserWindow({
     width: 1000,       // Tamaño inicial antes de maximizar
     height: 700,       // Tamaño inicial antes de maximizar
@@ -91,7 +84,6 @@ function createMainWindow() {
     
     if (splashWindow && !splashWindow.isDestroyed()) {
       splashWindow.close();
-      console.log('✨ Splash cerrado');
     }
   });
 }
@@ -112,7 +104,6 @@ ipcMain.handle('navigate-to', async (event, page) => {
 
 // ⚡ ARRANQUE ULTRA-RÁPIDO
 app.whenReady().then(() => {
-  console.log('🚀 Electron listo - Splash ultra-rápido');
   createUltraFastSplash();
 });
 

@@ -4,7 +4,6 @@ const { obtenerReporteDiario, obtenerReporteMensual, obtenerHistorialProducto, o
 // Reporte diario
 ipcMain.handle('obtener-reporte-diario', async (event, fecha) => {
   try {
-    console.log('📅 IPC: Obteniendo reporte diario para:', fecha);
     const reporte = await obtenerReporteDiario(fecha);
     return { success: true, data: reporte };
   } catch (error) {
@@ -16,7 +15,6 @@ ipcMain.handle('obtener-reporte-diario', async (event, fecha) => {
 // Reporte mensual
 ipcMain.handle('obtener-reporte-mensual', async (event, año, mes) => {
   try {
-    console.log('📈 IPC: Obteniendo reporte mensual para:', año, mes);
     const reporte = await obtenerReporteMensual(año, mes);
     return { success: true, data: reporte };
   } catch (error) {
@@ -28,7 +26,6 @@ ipcMain.handle('obtener-reporte-mensual', async (event, año, mes) => {
 // Historial de producto
 ipcMain.handle('obtener-historial-producto', async (event, productoId, fechaInicio, fechaFin) => {
   try {
-    console.log('📦 IPC: Obteniendo historial de producto:', productoId);
     const historial = await obtenerHistorialProducto(productoId, fechaInicio, fechaFin);
     return { success: true, data: historial };
   } catch (error) {
@@ -40,7 +37,6 @@ ipcMain.handle('obtener-historial-producto', async (event, productoId, fechaInic
 // Obtener productos para selector
 ipcMain.handle('obtener-productos-selector', async (event) => {
   try {
-    console.log('📦 IPC: Obteniendo productos para selector');
     const productos = await obtenerProductos();
     return { success: true, data: productos };
   } catch (error) {
@@ -48,5 +44,3 @@ ipcMain.handle('obtener-productos-selector', async (event) => {
     return { success: false, error: error.message };
   }
 });
-
-console.log('✅ IPC Reportes registrado');

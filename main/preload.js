@@ -20,5 +20,12 @@ contextBridge.exposeInMainWorld('api', {
 contextBridge.exposeInMainWorld('electronAPI', {
   loadPage: (page) => ipcRenderer.invoke('navigate-to', page),
   obtenerResumenRapido: () => ipcRenderer.invoke('obtener-resumen-rapido'),
-  invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args)
+  invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
+  
+  // Funciones de respaldo
+  createManualBackup: () => ipcRenderer.invoke('backup:create-manual'),
+  getLastBackupInfo: () => ipcRenderer.invoke('backup:get-last-info'),
+  getBackupStatus: () => ipcRenderer.invoke('backup:get-status'),
+  listAllBackups: () => ipcRenderer.invoke('backup:list-all'),
+  restoreBackup: (fileName) => ipcRenderer.invoke('backup:restore', fileName)
 });

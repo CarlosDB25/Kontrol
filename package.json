@@ -26,7 +26,6 @@
       "assets/**/*",
       "database/**/*",
       "ipc/**/*",
-      "!src/css/brand.css",
       "!**/*.md",
       "!**/*.map",
       "!**/test/**",
